@@ -7,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrl: './footer.scss',
 })
 export class Footer {
+  email = '';
 
+  subscribe() {
+    if (this.email) {
+      console.log('Subscribed:', this.email);
+      this.email = '';
+      // lógica de suscripción
+    }
+  }
 }
