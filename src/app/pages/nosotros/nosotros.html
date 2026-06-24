@@ -1,1 +1,102 @@
-<p>nosotros works!</p>
+<app-navbar></app-navbar>
+
+<main>
+  <!-- Hero -->
+  <section class="nosotros-hero">
+    <div class="container">
+      <span class="section-tag">Sobre Nosotros</span>
+      <h1>Quiénes somos en <span class="highlight">iLearningHub</span></h1>
+      <p>Somos una plataforma de aprendizaje en línea comprometida con transformar la educación mediante tecnología accesible e innovadora.</p>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F0F2FF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Misión -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="mision-grid grid-2">
+        <div class="mision-visual">
+          <mat-card class="mision-card" appearance="outlined">
+            <mat-card-content>
+              <mat-icon class="mision-icon">auto_stories</mat-icon>
+              <p>"Transformamos vidas a través del conocimiento accesible y de calidad."</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="mision-text">
+          <span class="section-tag">Nuestra Misión</span>
+          <h2>Democratizar el acceso al conocimiento</h2>
+          <p>En iLearningHub creemos que el acceso al conocimiento es un derecho fundamental. Nuestra plataforma conecta a estudiantes con docentes de excelencia, ofreciendo una experiencia de aprendizaje flexible, interactiva y orientada a resultados reales.</p>
+          <p>Diseñamos cada funcionalidad pensando en el estudiante: seguimiento de progreso en tiempo real, evaluaciones dinámicas y contenido siempre actualizado por expertos.</p>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        @for (stat of stats; track stat.label) {
+          <div class="stat-item">
+            <span class="stat-number">{{ stat.number }}</span>
+            <span class="stat-label">{{ stat.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Valores -->
+  <section class="section-padding valores-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Lo que nos define</span>
+        <h2 class="section-title">Nuestros Valores</h2>
+        <p class="section-subtitle">Los principios que guían cada decisión que tomamos en iLearningHub.</p>
+      </div>
+      <div class="grid-4">
+        @for (v of valores; track v.titulo) {
+          <mat-card class="valor-card" appearance="outlined">
+            <mat-card-content>
+              <mat-icon class="valor-icon">{{ v.icon }}</mat-icon>
+              <h4>{{ v.titulo }}</h4>
+              <p>{{ v.desc }}</p>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipo -->
+  <section class="section-padding equipo-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Las personas detrás</span>
+        <h2 class="section-title">Nuestro Equipo</h2>
+        <p class="section-subtitle">Profesionales apasionados por la educación y la tecnología.</p>
+      </div>
+      <div class="grid-4">
+        @for (m of equipo; track m.nombre) {
+          <mat-card class="miembro-card" appearance="outlined">
+            <mat-card-content>
+              <div class="miembro-avatar">
+                <mat-icon>{{ m.icon }}</mat-icon>
+              </div>
+              <h4>{{ m.nombre }}</h4>
+              <p>{{ m.rol }}</p>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

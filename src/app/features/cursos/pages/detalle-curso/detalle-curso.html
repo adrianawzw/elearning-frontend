@@ -1,1 +1,116 @@
-<p>detalle-curso works!</p>
+<app-navbar></app-navbar>
+
+<main>
+  <!-- Hero -->
+  <section class="detalle-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a routerLink="/cursos">Cursos</a>
+        <span>/</span>
+        <span>{{ curso.titulo }}</span>
+      </div>
+
+      <div class="detalle-grid">
+        <div class="detalle-info">
+          <mat-chip-set>
+            <mat-chip>{{ curso.categoria }}</mat-chip>
+            <mat-chip>{{ curso.nivel }}</mat-chip>
+          </mat-chip-set>
+          <h1>{{ curso.titulo }}</h1>
+          <p>{{ curso.descripcion }}</p>
+
+          <div class="detalle-meta">
+            <div class="meta-item">
+              <mat-icon>person</mat-icon>
+              <div>
+                <span class="meta-label">Docente</span>
+                <span class="meta-value">{{ curso.docente }}</span>
+              </div>
+            </div>
+            <div class="meta-item">
+              <mat-icon>group</mat-icon>
+              <div>
+                <span class="meta-label">Estudiantes</span>
+                <span class="meta-value">{{ curso.estudiantes }}+</span>
+              </div>
+            </div>
+            <div class="meta-item">
+              <mat-icon>schedule</mat-icon>
+              <div>
+                <span class="meta-label">Duración</span>
+                <span class="meta-value">{{ curso.duracion }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-card class="detalle-card">
+          <mat-card-content>
+            <div class="card-banner">{{ curso.icon }}</div>
+            <h3>Acceso Completo</h3>
+            <ul class="beneficios">
+              <li><mat-icon>check_circle</mat-icon> Acceso de por vida</li>
+              <li><mat-icon>check_circle</mat-icon> Certificado al completar</li>
+              <li><mat-icon>check_circle</mat-icon> Soporte del docente</li>
+              <li><mat-icon>check_circle</mat-icon> Material descargable</li>
+            </ul>
+            <button mat-flat-button class="btn-inscribir">Inscribirme ahora</button>
+            <a mat-stroked-button routerLink="/cursos" class="btn-volver">← Volver al catálogo</a>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F0F2FF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Contenido -->
+  <section class="section-padding">
+    <div class="container detalle-content">
+
+      <!-- Objetivos -->
+      <mat-card class="content-card">
+        <mat-card-header>
+          <mat-card-title>Lo que aprenderás</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="objetivos-grid">
+            @for (obj of curso.objetivos; track obj) {
+              <div class="objetivo-item">
+                <mat-icon color="primary">check</mat-icon>
+                <span>{{ obj }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Temario -->
+      <mat-card class="content-card">
+        <mat-card-header>
+          <mat-card-title>Contenido del curso</mat-card-title>
+          <mat-card-subtitle>{{ curso.temario.length }} módulos · {{ curso.duracion }} de contenido</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            @for (modulo of curso.temario; track modulo.modulo; let i = $index) {
+              <mat-list-item class="modulo-item">
+                <span matListItemIcon class="modulo-num">{{ i + 1 }}</span>
+                <span matListItemTitle>{{ modulo.titulo }}</span>
+                <span matListItemLine>{{ modulo.modulo }}</span>
+                <span matListItemMeta>{{ modulo.lecciones }} lecciones</span>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+            }
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
