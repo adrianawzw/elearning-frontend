@@ -1,1 +1,76 @@
-<p>lista-cursos works!</p>
+<app-navbar></app-navbar>
+
+<main>
+  <!-- Hero -->
+  <section class="cursos-hero">
+    <div class="container">
+      <span class="section-tag">iLearningHub</span>
+      <h1>Explora Nuestros <span class="highlight">Cursos</span></h1>
+      <p>Descubre una amplia variedad de cursos diseñados por expertos para impulsar tu carrera profesional.</p>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F0F2FF"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Filtros -->
+  <section class="section-padding-sm">
+    <div class="container">
+      <div class="filtros">
+        @for (cat of categorias; track cat) {
+          <button
+            class="filtro-btn"
+            [class.active]="categoriaActiva === cat"
+            (click)="setCategoria(cat)">
+            {{ cat }}
+          </button>
+        }
+      </div>
+
+      <p class="resultados-texto">
+        Mostrando <strong>{{ cursosFiltrados.length }}</strong> cursos
+        @if (categoriaActiva !== 'Todos') { en <strong>{{ categoriaActiva }}</strong> }
+      </p>
+
+      <!-- Grid de cursos -->
+      <div class="cursos-grid">
+        @for (curso of cursosFiltrados; track curso.id) {
+          <div class="curso-card card">
+            <div class="curso-banner">
+              <span class="curso-emoji">{{ curso.icon }}</span>
+              <span class="nivel-badge" [class]="getNivelClass(curso.nivel)">{{ curso.nivel }}</span>
+            </div>
+            <div class="curso-body">
+              <span class="curso-categoria">{{ curso.categoria }}</span>
+              <h4>{{ curso.titulo }}</h4>
+              <p>{{ curso.descripcion }}</p>
+              <div class="curso-meta">
+                <span>👤 {{ curso.docente }}</span>
+                <span>👥 {{ curso.estudiantes }}</span>
+                <span>⏱ {{ curso.duracion }}</span>
+              </div>
+            </div>
+            <div class="curso-footer">
+              <a [routerLink]="['/cursos', curso.id]" class="btn btn-primary">Ver Curso</a>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <h2>¿No encuentras lo que buscas?</h2>
+        <p>Contáctanos y te ayudamos a encontrar el curso perfecto para ti.</p>
+        <a routerLink="/contacto" class="btn btn-outline-light">Contáctanos</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

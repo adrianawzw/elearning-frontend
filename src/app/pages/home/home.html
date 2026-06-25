@@ -1,1 +1,184 @@
-<p>home works!</p>
+<app-navbar></app-navbar>
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Left Content -->
+        <div class="hero-content">
+          <span class="section-tag">iLearningHub</span>
+          <h1 class="hero-title">
+            Estudiar en línea<br />
+            <span class="gradient-text">es más fácil</span>
+          </h1>
+          <p class="hero-subtitle">
+            iLearningHub es una plataforma que te enseñará de una manera más interactiva.
+          </p>
+
+          <div class="hero-buttons">
+            <button class="btn btn-gradient">Unirse gratis</button>
+            <button class="btn btn-secondary">▶ Mira como funciona</button>
+          </div>
+
+          <div class="hero-mini-card">
+            <mat-icon>school</mat-icon>
+            <div>
+              <p class="mini-card-title">Ver Experiencia</p>
+              <p class="mini-card-time">Hoy a las 12:00 PM</p>
+            </div>
+            <button class="mini-card-btn">Unirse Ahora</button>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <mat-card class="hero-stats-badge" appearance="outlined">
+            <span class="stat-number">250k</span>
+            <span class="stat-label">Estudiantes Inscritos</span>
+          </mat-card>
+
+          <div class="hero-image-wrapper">
+            <img
+              src="images/home/img-hero-home.png"
+              alt="Estudiante aprendiendo en línea"
+              class="hero-image"
+            />
+          </div>
+
+          <mat-card class="hero-success-badge" appearance="outlined">
+            <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
+            <div>
+              <p class="success-title">Felicitaciones</p>
+              <p class="success-desc">Tu curso se ha completado</p>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding success-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Nuestro Éxito</span>
+        <h2 class="section-title">Nuestro Éxito</h2>
+        <p class="section-subtitle">
+          A lo largo de los años, hemos ayudado a miles de estudiantes a alcanzar sus metas
+          educativas. Aquí hay algunos de nuestros logros más destacados:
+        </p>
+      </div>
+
+      <div class="stats-grid">
+        @for (stat of stats; track stat.label) {
+          <div class="stat-item">
+            <span class="stat-number-large">{{ stat.number }}</span>
+            <span class="stat-label">{{ stat.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding features-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2 class="section-title">Nuestras Características</h2>
+        <p class="section-subtitle">
+          iLearningHub es una plataforma de aprendizaje en línea todo en uno que ofrece una amplia
+          gama de cursos y recursos educativos para estudiantes de todas las edades y niveles.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        @for (feature of features; track feature.title) {
+          <div class="feature-card card">
+            <div class="feature-icon">{{ feature.icon }}</div>
+            <h4>{{ feature.title }}</h4>
+            <p>{{ feature.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding testimonials-section">
+    <div class="container">
+      <div class="testimonials-grid grid-2">
+        <div class="testimonial-left">
+          <span class="section-tag">Testimonios</span>
+          <h2 class="section-title">¿Qué dicen?</h2>
+          <p class="section-subtitle" style="text-align: left; margin: 0 0 1.5rem">
+            Nuestros estudiantes han experimentado transformaciones increíbles gracias a
+            iLearningHub. Aquí hay un testimonio destacado de uno de nuestros usuarios satisfechos:
+          </p>
+          <div class="testimonial-quote">
+            <mat-icon class="quote-icon">format_quote</mat-icon>
+            <p class="testimonial-text">"{{ testimonials[0].text }}"</p>
+          </div>
+          <p class="testimonial-author">— {{ testimonials[0].name }}</p>
+          <div class="testimonial-info">
+            <p>Más de 100k calificaciones positivas de estudiantes y profesores en todo el mundo.</p>
+            <p class="testimonial-note">Algunos de los estudiantes y profesores fueron muy ayudados por iLearningHub.</p>
+          </div>
+        </div>
+
+        <div class="testimonial-right">
+          <div class="testimonial-image-card">
+            <img
+              src="images/home/img-testimonial-home.png"
+              alt="{{ testimonials[0].name }}"
+            />
+            <div class="testimonial-card">
+              <p class="testimonial-card-text">"{{ testimonials[0].text }}"</p>
+              <p class="testimonial-card-author">{{ testimonials[0].name }}</p>
+              <div class="testimonial-card-rating">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span class="review-count">12 reseñas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding news-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2 class="section-title">Últimas Noticias y Recursos</h2>
+        <p class="section-subtitle">
+          Mantente al día con las últimas actualizaciones y recursos educativos.
+        </p>
+      </div>
+
+      <div class="news-layout">
+        <article class="news-card news-card-featured card">
+          <div class="news-card-image image-placeholder"></div>
+          <div class="news-card-body">
+            <span class="news-tag">News</span>
+            <h4>{{ news[0].title }}</h4>
+            @if (news[0].subtitle) {
+              <p class="news-subtitle">{{ news[0].subtitle }}</p>
+            }
+            <p class="news-desc">{{ news[0].description }}</p>
+            <a class="news-link">Leer más</a>
+          </div>
+        </article>
+
+        <div class="news-sidebar">
+          @for (item of news; track item.title; let index = $index) {
+            @if (index > 0) {
+              <article class="news-card news-card-small card">
+                <div class="news-card-image-sm image-placeholder-sm"></div>
+                <div class="news-card-content">
+                  <span class="news-tag">News</span>
+                  <h4>{{ item.title }}</h4>
+                  <p class="news-desc">{{ item.description }}</p>
+                </div>
+              </article>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-footer></app-footer>

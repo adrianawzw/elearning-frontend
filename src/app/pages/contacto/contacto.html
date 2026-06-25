@@ -1,1 +1,136 @@
-<p>contacto works!</p>
+<app-navbar></app-navbar>
+
+<main>
+  <!-- Hero -->
+  <section class="contacto-hero">
+    <div class="container">
+      <span class="section-tag">Contacto</span>
+      <h1>¿Tienes alguna <span class="highlight">pregunta?</span></h1>
+      <p>Estamos aquí para ayudarte. Escríbenos y te responderemos a la brevedad posible.</p>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F0F2FF"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="container contacto-layout">
+
+      <!-- Info -->
+      <div class="contacto-info">
+        <h2>Información de contacto</h2>
+        <p>Puedes contactarnos por cualquiera de estos medios o dejarnos un mensaje directo.</p>
+
+        <div class="info-items">
+          <mat-card class="info-card" appearance="outlined">
+            <mat-card-content>
+              <mat-icon>email</mat-icon>
+              <div>
+                <strong>Email</strong>
+                <p>contacto&#64;ilearninghub.com</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="info-card" appearance="outlined">
+            <mat-card-content>
+              <mat-icon>phone</mat-icon>
+              <div>
+                <strong>Teléfono</strong>
+                <p>+1 (555) 123-4567</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="info-card" appearance="outlined">
+            <mat-card-content>
+              <mat-icon>location_on</mat-icon>
+              <div>
+                <strong>Ubicación</strong>
+                <p>Campus Virtual, Ciudad Universitaria</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="info-card" appearance="outlined">
+            <mat-card-content>
+              <mat-icon>schedule</mat-icon>
+              <div>
+                <strong>Horario</strong>
+                <p>Lunes a Viernes: 8:00 – 18:00</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <mat-card class="contacto-form-card">
+        <mat-card-header>
+          <mat-card-title>Envíanos un mensaje</mat-card-title>
+          <mat-card-subtitle>Todos los campos son requeridos</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contacto-form" novalidate>
+
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Nombre completo</mat-label>
+              <input matInput formControlName="nombre" placeholder="Tu nombre completo">
+              <mat-icon matPrefix>person</mat-icon>
+              @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+                <mat-error>
+                  @if (form.get('nombre')?.hasError('required')) { El nombre es requerido }
+                  @if (form.get('nombre')?.hasError('minlength')) { Mínimo 3 caracteres }
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Correo electrónico</mat-label>
+              <input matInput formControlName="email" type="email" placeholder="tu@email.com">
+              <mat-icon matPrefix>email</mat-icon>
+              @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                <mat-error>
+                  @if (form.get('email')?.hasError('required')) { El email es requerido }
+                  @if (form.get('email')?.hasError('email')) { Ingresa un email válido }
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Asunto</mat-label>
+              <input matInput formControlName="asunto" placeholder="Motivo de tu consulta">
+              <mat-icon matPrefix>subject</mat-icon>
+              @if (form.get('asunto')?.invalid && form.get('asunto')?.touched) {
+                <mat-error>El asunto es requerido</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-field">
+              <mat-label>Mensaje</mat-label>
+              <textarea matInput formControlName="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..."></textarea>
+              @if (form.get('mensaje')?.invalid && form.get('mensaje')?.touched) {
+                <mat-error>
+                  @if (form.get('mensaje')?.hasError('required')) { El mensaje es requerido }
+                  @if (form.get('mensaje')?.hasError('minlength')) { Mínimo 20 caracteres }
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <button mat-flat-button type="submit" class="submit-btn">
+              <mat-icon>send</mat-icon>
+              Enviar mensaje
+            </button>
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

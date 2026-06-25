@@ -1,1 +1,32 @@
-<p>navbar works!</p>
+<nav class="navbar" [class.scrolled]="">
+  <div class="container navbar-container">
+    <a routerLink="/" class="navbar-brand">
+      <span class="brand-icon">📚</span>
+      <span class="brand-text">iLearningHub</span>
+    </a>
+
+    <button class="navbar-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+      <span class="hamburger" [class.active]="isMenuOpen">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+
+    <div class="navbar-links" [class.active]="isMenuOpen">
+      <ul>
+        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
+        <li><a routerLink="/cursos" (click)="closeMenu()">Cursos</a></li>
+        <li><a routerLink="/nosotros" (click)="closeMenu()">Nosotros</a></li>
+        <li><a routerLink="/contacto" (click)="closeMenu()">Contacto</a></li>
+      </ul>
+
+      <div class="navbar-auth">
+        @if (!isLoggedIn) {
+          <a routerLink="/auth/login" class="btn btn-ghost" (click)="closeMenu()">Inciar Sesión</a>
+          <a routerLink="/auth/register" class="btn btn-primary" (click)="closeMenu()">Registrarse</a>
+        } @else {
+          <a routerLink="/dashboard" class="btn btn-primary" (click)="closeMenu()">Dashboard</a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>

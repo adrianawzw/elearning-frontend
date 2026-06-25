@@ -1,1 +1,65 @@
-<p>footer works!</p>
+<footer class="footer">
+  <div class="container">
+    <!-- Top Section -->
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-icon">📚</span>
+          <span class="brand-text">iLearningHub</span>
+        </div>
+        <p class="brand-desc">Clases virtuales por Zoom. Mejorando la educación.</p>
+      </div>
+
+      <div class="footer-newsletter">
+        <h4>Suscribirse para recibir nuestras noticias</h4>
+        <div class="newsletter-form">
+          <input
+            type="email"
+            placeholder="Your Email"
+            class="newsletter-input"
+          >
+          <button class="btn btn-primary" (click)="subscribe()">Suscribirse</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Links Rápidos</h5>
+        <ul>
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/cursos">Cursos</a></li>
+          <li><a routerLink="/nosotros">Nosotros</a></li>
+          <li><a routerLink="/contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Recursos</h5>
+        <ul>
+          <li><a href="#">Blog y comentarios</a></li>
+          <li><a href="#">Centro de Ayuda</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Términos y Condiciones</a></li>
+        </ul>
+      </div>
+      <div class="footer-col social">
+        <h5>Nuestras Redes Sociales</h5>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Class Technologies Inc. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
