@@ -1,0 +1,343 @@
+@import '../../../../../styles.scss';
+
+.dashboard-estudiante {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+  }
+
+  p {
+    color: var(--gray);
+    font-size: 1rem;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border-left: 4px solid var(--primary);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .stat-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(73, 187, 189, 0.1);
+    border-radius: var(--radius-md);
+  }
+
+  .stat-content {
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--dark);
+      display: block;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+  }
+}
+
+.chart-card {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+
+  .mat-mdc-card-title {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: 200px;
+    padding: 0.5rem 0;
+  }
+
+  .chart-bar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .chart-bar {
+    width: 100%;
+    max-width: 40px;
+    border-radius: 4px 4px 0 0;
+    min-height: 10px;
+    transition: var(--transition);
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+      transform: scaleY(1.05);
+      transform-origin: bottom;
+    }
+
+    .chart-value {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--gray);
+      white-space: nowrap;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    &:hover .chart-value {
+      opacity: 1;
+    }
+  }
+
+  .chart-label {
+    font-size: 0.6rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+  }
+}
+
+.dashboard-bottom {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.activities-card {
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+
+  .mat-mdc-card-title {
+    color: var(--dark);
+    font-weight: 600;
+  }
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--gray-lighter);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .activity-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .activity-image {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  overflow: hidden;
+
+  .activity-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+  .activity-details {
+    flex: 1;
+
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 0.2rem;
+      color: var(--dark);
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin: 0 0 0.5rem;
+    }
+
+    .activity-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      .category-chip {
+        background: var(--off-white);
+        font-size: 0.7rem;
+        padding: 0.1rem 0.75rem;
+        border-radius: var(--radius-sm);
+        color: var(--gray-dark);
+      }
+
+      .progress-text {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary);
+      }
+    }
+
+    .activity-progress {
+      height: 4px;
+      border-radius: 2px;
+
+      .mat-mdc-progress-bar {
+        --mdc-linear-progress-track-color: var(--gray-lighter);
+        --mdc-linear-progress-active-indicator-color: var(--primary);
+      }
+    }
+  }
+
+  .activity-btn {
+    color: var(--gray);
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
+}
+
+.categories-card {
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+
+  .mat-mdc-card-title {
+    color: var(--dark);
+    font-weight: 600;
+  }
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--gray-lighter);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .category-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 0.9rem;
+    color: var(--dark);
+  }
+
+  .category-count {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-bars {
+    gap: 0.25rem;
+    height: 150px;
+  }
+
+  .chart-bar-container {
+    .chart-bar {
+      max-width: 20px;
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+
+    .stat-icon {
+      font-size: 1.8rem;
+      width: 48px;
+      height: 48px;
+    }
+
+    .stat-content .stat-value {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

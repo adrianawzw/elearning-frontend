@@ -1,1 +1,115 @@
-<p>dashboard-docente works!</p>
+<div class="dashboard-docente">
+
+  <!-- HEADER -->
+  <div class="dashboard-header">
+    <h2>Dashboard Docente</h2>
+    <p>Bienvenido, Prof. Carlos 🎉</p>
+  </div>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>school</mat-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">4</span>
+        <span class="stat-label">Cursos dictados</span>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">156</span>
+        <span class="stat-label">Estudiantes totales</span>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>star</mat-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">4.8</span>
+        <span class="stat-label">Calificación promedio</span>
+      </div>
+    </mat-card>
+    <mat-card class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">8</span>
+        <span class="stat-label">Evaluaciones pendientes</span>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="courses-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>book</mat-icon> Mis Cursos
+      </mat-card-title>
+      <button mat-raised-button color="primary" class="add-course-btn">
+        <mat-icon>add</mat-icon> Crear Curso
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      @for (course of myCourses; track course.title) {
+        <div class="course-item">
+          <div class="course-info">
+            <div class="course-image">
+              <img [src]="course.image" [alt]="course.title" class="course-img">
+            </div>
+            <div class="course-details">
+              <h4>{{ course.title }}</h4>
+              <div class="course-meta">
+                <span class="course-students">
+                  <mat-icon>people</mat-icon> {{ course.students }} estudiantes
+                </span>
+                <span class="course-rating">
+                  <mat-icon>star</mat-icon> {{ course.rating }}
+                </span>
+              </div>
+              <div class="course-progress-wrapper">
+                <span class="progress-label">Progreso del curso</span>
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="course.progress"
+                  class="course-progress"
+                ></mat-progress-bar>
+                <span class="progress-value">{{ course.progress }}%</span>
+              </div>
+            </div>
+          </div>
+          <button mat-stroked-button color="primary" class="manage-btn">
+            <mat-icon>manage</mat-icon> Gestionar
+          </button>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- ACTIVIDADES RECIENTES -->
+  <mat-card class="activities-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>history</mat-icon> Actividades Recientes
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @for (activity of recentActivities; track activity.time) {
+        <div class="activity-item">
+          <div class="activity-icon">
+            <mat-icon>{{ activity.icon }}</mat-icon>
+          </div>
+          <div class="activity-content">
+            <p class="activity-action">{{ activity.action }}</p>
+            <p class="activity-course">{{ activity.course }}</p>
+            <span class="activity-time">{{ activity.time }}</span>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
