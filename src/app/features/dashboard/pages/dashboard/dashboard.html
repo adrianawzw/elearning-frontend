@@ -1,7 +1,6 @@
 <div class="dashboard-container">
   <mat-drawer-container class="drawer-container">
 
-    <!-- SIDEBAR -->
     <mat-drawer
       #drawer
       [mode]="isHandset ? 'over' : 'side'"
@@ -21,7 +20,6 @@
         }
       </div>
 
-      <!-- Perfil -->
       <div class="drawer-profile">
         <img [src]="userAvatar" alt="Avatar" class="profile-avatar">
         <div class="profile-info">
@@ -30,7 +28,6 @@
         </div>
       </div>
 
-      <!-- Menú -->
       <mat-nav-list class="nav-list">
         @for (item of menuItems; track item.route) {
           <a
@@ -47,7 +44,6 @@
         }
       </mat-nav-list>
 
-      <!-- Footer -->
       <div class="drawer-footer">
         <button mat-button class="logout-btn" (click)="logout()">
           <mat-icon>logout</mat-icon>
@@ -56,10 +52,8 @@
       </div>
     </mat-drawer>
 
-    <!-- CONTENIDO -->
     <mat-drawer-content class="drawer-content">
 
-      <!-- Top Bar -->
       <mat-toolbar class="top-bar">
         <div class="top-bar-left">
           <button mat-icon-button class="menu-toggle" (click)="drawer.toggle()">
@@ -95,7 +89,6 @@
         </div>
       </mat-toolbar>
 
-      <!-- Contenido dinámico -->
       <div class="content-area">
         @if (userRole === 'estudiante') {
           <app-dashboard-estudiante></app-dashboard-estudiante>
