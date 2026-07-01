@@ -2,7 +2,6 @@
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 40px;
   background-color: #eef5ff;
 }
@@ -22,15 +21,10 @@
 mat-card-title {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 20px;
 }
 
 mat-card-header {
   margin-bottom: 20px;
-}
-
-textarea {
-  resize: none;
 }
 
 .btn {
@@ -39,7 +33,6 @@ textarea {
   margin-top: 30px;
   border-radius: 10px;
   font-size: 1rem;
-  font-weight: 500;
   background-color: #4ecdc4 !important;
   color: white !important;
 }
