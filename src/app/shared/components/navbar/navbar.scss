@@ -119,6 +119,11 @@
           width: 100%;
         }
       }
+
+      &.active {
+        color: var(--primary);
+        &::after { width: 100%; }
+      }
     }
   }
 }
@@ -185,12 +190,23 @@
 
       a {
         font-size: 1.2rem;
+        color: var(--dark) !important;
+
+        &:hover, &.active {
+          color: #49BBBD !important;
+          &::after { background: #49BBBD; }
+        }
       }
     }
 
     .navbar-auth {
       flex-direction: column;
       width: 100%;
+
+      .btn-ghost {
+        color: var(--dark) !important;
+        &:hover { color: #49BBBD !important; }
+      }
 
       .btn {
         width: 100%;

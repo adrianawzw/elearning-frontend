@@ -35,12 +35,17 @@
             <span class="stat-label">Estudiantes Inscritos</span>
           </mat-card>
 
-          <div class="hero-image-wrapper">
-            <img
-              src="images/home/img-hero-home.png"
-              alt="Estudiante aprendiendo en línea"
-              class="hero-image"
-            />
+          <div class="hero-carousel">
+            @for (slide of slides; track slide.img; let i = $index) {
+              <div class="carousel-slide" [class.active]="i === currentSlide">
+                <img [src]="slide.img" [alt]="slide.alt" />
+              </div>
+            }
+            <div class="carousel-dots">
+              @for (slide of slides; track slide.img; let i = $index) {
+                <button class="dot" [class.active]="i === currentSlide" (click)="goTo(i)"></button>
+              }
+            </div>
           </div>
 
           <mat-card class="hero-success-badge" appearance="outlined">
@@ -90,7 +95,7 @@
       <div class="grid-3">
         @for (feature of features; track feature.title) {
           <div class="feature-card card">
-            <div class="feature-icon">{{ feature.icon }}</div>
+            <div class="feature-icon"><mat-icon>{{ feature.icon }}</mat-icon></div>
             <h4>{{ feature.title }}</h4>
             <p>{{ feature.description }}</p>
           </div>
@@ -130,7 +135,11 @@
               <p class="testimonial-card-text">"{{ testimonials[0].text }}"</p>
               <p class="testimonial-card-author">{{ testimonials[0].name }}</p>
               <div class="testimonial-card-rating">
-                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <div class="stars">
+                  @for (s of [1,2,3,4,5]; track s) {
+                    <mat-icon class="star-icon">star</mat-icon>
+                  }
+                </div>
                 <span class="review-count">12 reseñas</span>
               </div>
             </div>
@@ -151,7 +160,9 @@
 
       <div class="news-layout">
         <article class="news-card news-card-featured card">
-          <div class="news-card-image image-placeholder"></div>
+          <div class="news-card-image">
+            <img [src]="news[0].img" [alt]="news[0].title" />
+          </div>
           <div class="news-card-body">
             <span class="news-tag">News</span>
             <h4>{{ news[0].title }}</h4>
@@ -167,7 +178,9 @@
           @for (item of news; track item.title; let index = $index) {
             @if (index > 0) {
               <article class="news-card news-card-small card">
-                <div class="news-card-image-sm image-placeholder-sm"></div>
+                <div class="news-card-image-sm">
+                  <img [src]="item.img" [alt]="item.title" />
+                </div>
                 <div class="news-card-content">
                   <span class="news-tag">News</span>
                   <h4>{{ item.title }}</h4>

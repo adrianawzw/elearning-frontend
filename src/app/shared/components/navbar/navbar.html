@@ -1,4 +1,4 @@
-<nav class="navbar" [class.scrolled]="">
+<nav class="navbar" [class.scrolled]="isScrolled">
   <div class="container navbar-container">
     <a routerLink="/" class="navbar-brand">
       <mat-icon class="brand-icon">menu_book</mat-icon>
@@ -13,10 +13,10 @@
 
     <div class="navbar-links" [class.active]="isMenuOpen">
       <ul>
-        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
-        <li><a routerLink="/cursos" (click)="closeMenu()">Cursos</a></li>
-        <li><a routerLink="/nosotros" (click)="closeMenu()">Nosotros</a></li>
-        <li><a routerLink="/contacto" (click)="closeMenu()">Contacto</a></li>
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">Home</a></li>
+        <li><a routerLink="/cursos" routerLinkActive="active" (click)="closeMenu()">Cursos</a></li>
+        <li><a routerLink="/nosotros" routerLinkActive="active" (click)="closeMenu()">Nosotros</a></li>
+        <li><a routerLink="/contacto" routerLinkActive="active" (click)="closeMenu()">Contacto</a></li>
       </ul>
 
       <div class="navbar-auth">

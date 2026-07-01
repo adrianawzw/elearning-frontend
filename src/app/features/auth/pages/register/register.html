@@ -1,1 +1,103 @@
-<p>register works!</p>
+<div class="auth-layout">
+
+  <!-- Panel izquierdo -->
+  <div class="auth-left">
+    <a routerLink="/" class="auth-logo">
+      <mat-icon>menu_book</mat-icon>
+      <span>iLearningHub</span>
+    </a>
+    <div class="auth-left-content">
+      <h2>Empieza a aprender hoy</h2>
+      <p>Únete a miles de estudiantes que ya están transformando su carrera con iLearningHub.</p>
+      <ul class="auth-benefits">
+        <li><mat-icon>check_circle</mat-icon> Acceso a +200 cursos</li>
+        <li><mat-icon>check_circle</mat-icon> Certificados reconocidos</li>
+        <li><mat-icon>check_circle</mat-icon> Aprende a tu ritmo</li>
+        <li><mat-icon>check_circle</mat-icon> Soporte de docentes expertos</li>
+      </ul>
+    </div>
+    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop" alt="Estudiantes" class="auth-bg-img" />
+  </div>
+
+  <!-- Panel derecho -->
+  <div class="auth-right">
+    <div class="auth-form-wrapper">
+      <div class="auth-header">
+        <h1>Crear cuenta</h1>
+        <p>Completa el formulario para comenzar gratis</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-field">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" placeholder="Tu nombre" />
+            <mat-icon matPrefix>person</mat-icon>
+            @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+              <mat-error>Nombre requerido (mín. 2 caracteres)</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-field">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="apellido" placeholder="Tu apellido" />
+            <mat-icon matPrefix>person</mat-icon>
+            @if (form.get('apellido')?.invalid && form.get('apellido')?.touched) {
+              <mat-error>Apellido requerido</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="tu@email.com" />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <mat-error>
+              @if (form.get('email')?.hasError('required')) { El email es requerido }
+              @if (form.get('email')?.hasError('email')) { Ingresa un email válido }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Contraseña</mat-label>
+          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Mínimo 6 caracteres" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <mat-error>Contraseña requerida (mín. 6 caracteres)</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Confirmar contraseña</mat-label>
+          <input matInput formControlName="confirmPassword" [type]="showConfirm ? 'text' : 'password'" placeholder="Repite tu contraseña" />
+          <mat-icon matPrefix>lock_reset</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="showConfirm = !showConfirm">
+            <mat-icon>{{ showConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('confirmPassword')?.touched && form.hasError('passwordMismatch')) {
+            <mat-error>Las contraseñas no coinciden</mat-error>
+          }
+        </mat-form-field>
+
+        <button type="submit" class="btn-submit" [disabled]="form.invalid">
+          <mat-icon>person_add</mat-icon>
+          Crear cuenta gratis
+        </button>
+
+      </form>
+
+      <div class="auth-divider"><span>o</span></div>
+
+      <div class="auth-footer">
+        <p>¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
