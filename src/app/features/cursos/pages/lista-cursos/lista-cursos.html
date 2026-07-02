@@ -39,7 +39,7 @@
         @for (curso of cursosFiltrados; track curso.id) {
           <div class="curso-card card">
             <div class="curso-banner">
-              <span class="curso-emoji">{{ curso.icon }}</span>
+              <img [src]="curso.img" [alt]="curso.titulo" class="curso-banner-img" />
               <span class="nivel-badge" [class]="getNivelClass(curso.nivel)">{{ curso.nivel }}</span>
             </div>
             <div class="curso-body">
@@ -47,9 +47,9 @@
               <h4>{{ curso.titulo }}</h4>
               <p>{{ curso.descripcion }}</p>
               <div class="curso-meta">
-                <span>👤 {{ curso.docente }}</span>
-                <span>👥 {{ curso.estudiantes }}</span>
-                <span>⏱ {{ curso.duracion }}</span>
+                <span><mat-icon>person</mat-icon> {{ curso.docente }}</span>
+                <span><mat-icon>group</mat-icon> {{ curso.estudiantes }}</span>
+                <span><mat-icon>schedule</mat-icon> {{ curso.duracion }}</span>
               </div>
             </div>
             <div class="curso-footer">

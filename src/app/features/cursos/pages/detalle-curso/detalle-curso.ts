@@ -25,6 +25,7 @@ export class DetalleCurso {
     estudiantes: 320,
     duracion: '20h',
     icon: '💻',
+    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=300&fit=crop',
     descripcion: 'Aprende Angular moderno con proyectos reales. Este curso te llevará desde los conceptos básicos hasta la construcción de aplicaciones completas con Angular Material, RxJS y comunicación con APIs REST.',
     objetivos: [
       'Comprender la arquitectura de Angular',

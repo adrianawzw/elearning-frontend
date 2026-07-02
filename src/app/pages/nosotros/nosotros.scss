@@ -33,27 +33,37 @@
   display: flex;
   justify-content: center;
 
-  .mision-card {
-    background: linear-gradient(135deg, #49BBBD15, #49BBBD30) !important;
-    border-color: #49BBBD50 !important;
-    border-radius: 20px !important;
-    padding: 1rem;
-    text-align: center;
-    max-width: 320px;
+  .mision-img-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
 
-    .mision-icon {
-      font-size: 5rem;
-      width: 5rem;
-      height: 5rem;
-      color: #49BBBD;
-      margin-bottom: 1.5rem;
+    .mision-img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
     }
 
-    p {
-      font-size: 1.1rem;
-      font-style: italic;
-      color: var(--gray-dark);
-      line-height: 1.7;
+    .mision-img-badge {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-md);
+
+      mat-icon { color: #49BBBD; font-size: 1.5rem; width: 1.5rem; height: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+      p { margin: 0; font-size: 0.9rem; font-style: italic; color: var(--gray-dark); line-height: 1.5; }
     }
   }
 }
@@ -121,17 +131,15 @@
   mat-card-content { padding: 2rem 1.5rem !important; }
 
   .miembro-avatar {
-    width: 72px;
-    height: 72px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #49BBBD20, #49BBBD40);
-    border: 2px solid #49BBBD50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+    border: 3px solid #49BBBD50;
     margin: 0 auto 1rem;
+    box-shadow: 0 4px 12px rgba(73,187,189,0.25);
 
-    mat-icon { font-size: 2rem; width: 2rem; height: 2rem; color: #49BBBD; }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
   }
 
   h4 { color: var(--dark); margin-bottom: 0.25rem; font-size: 1.05rem; }

@@ -46,7 +46,9 @@
 
         <mat-card class="detalle-card">
           <mat-card-content>
-            <div class="card-banner">{{ curso.icon }}</div>
+            <div class="card-banner">
+            <img [src]="curso.img" [alt]="curso.titulo" />
+          </div>
             <h3>Acceso Completo</h3>
             <ul class="beneficios">
               <li><mat-icon>check_circle</mat-icon> Acceso de por vida</li>

@@ -20,9 +20,9 @@ export const routes: Routes = [
 
   { path: 'contacto', component: Contacto },
 
-  { path: 'login', component: Login },
+  { path: 'auth/login', component: Login },
 
-  { path: 'register', component: Register },
+  { path: 'auth/register', component: Register },
 
   { path: 'dashboard', component: Dashboard },
 

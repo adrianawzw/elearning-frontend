@@ -1,1 +1,83 @@
-<p>login works!</p>
+<div class="auth-layout">
+
+  <!-- Panel izquierdo -->
+  <div class="auth-left">
+    <a routerLink="/" class="auth-logo">
+      <mat-icon>menu_book</mat-icon>
+      <span>iLearningHub</span>
+    </a>
+    <div class="auth-left-content">
+      <h2>Bienvenido de vuelta</h2>
+      <p>Continúa tu aprendizaje donde lo dejaste. Miles de estudiantes ya están avanzando.</p>
+      <div class="auth-stats">
+        <div class="auth-stat">
+          <span class="num">15K+</span>
+          <span class="lbl">Estudiantes</span>
+        </div>
+        <div class="auth-stat">
+          <span class="num">200+</span>
+          <span class="lbl">Cursos</span>
+        </div>
+        <div class="auth-stat">
+          <span class="num">50+</span>
+          <span class="lbl">Docentes</span>
+        </div>
+      </div>
+    </div>
+    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop" alt="Estudiantes" class="auth-bg-img" />
+  </div>
+
+  <!-- Panel derecho -->
+  <div class="auth-right">
+    <div class="auth-form-wrapper">
+      <div class="auth-header">
+        <h1>Iniciar Sesión</h1>
+        <p>Ingresa tus credenciales para acceder a tu cuenta</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="tu@email.com" />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <mat-error>
+              @if (form.get('email')?.hasError('required')) { El email es requerido }
+              @if (form.get('email')?.hasError('email')) { Ingresa un email válido }
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Contraseña</mat-label>
+          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Tu contraseña" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <mat-error>La contraseña es requerida</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="auth-options">
+          <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="form.invalid">
+          <mat-icon>login</mat-icon>
+          Iniciar Sesión
+        </button>
+
+      </form>
+
+      <div class="auth-divider"><span>o</span></div>
+
+      <div class="auth-footer">
+        <p>¿No tienes cuenta? <a routerLink="/auth/register">Regístrate gratis</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
