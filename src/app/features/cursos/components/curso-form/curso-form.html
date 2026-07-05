@@ -1,1 +1,98 @@
-<p>curso-form works!</p>
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Crear Curso</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="cursoForm">
+        <!-- Título -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título del curso</mat-label>
+
+          <input matInput formControlName="titulo" />
+
+          @if (titulo?.hasError('required') && titulo?.touched) {
+            <mat-error> El título es obligatorio </mat-error>
+          }
+
+          @if (titulo?.hasError('minlength') && titulo?.touched) {
+            <mat-error> Mínimo 5 caracteres </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Descripción -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+
+          <textarea matInput rows="4" formControlName="descripcion"> </textarea>
+
+          @if (descripcion?.hasError('required') && descripcion?.touched) {
+            <mat-error> La descripción es obligatoria </mat-error>
+          }
+
+          @if (descripcion?.hasError('minlength') && descripcion?.touched) {
+            <mat-error> La descripción debe tener mínimo 10 caracteres </mat-error>
+          }
+
+          @if (descripcion?.hasError('maxlength') && descripcion?.touched) {
+            <mat-error> Máximo 300 caracteres </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Nivel -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nivel</mat-label>
+
+          <mat-select formControlName="nivel">
+            <mat-option value="basico"> Básico </mat-option>
+
+            <mat-option value="intermedio"> Intermedio </mat-option>
+
+            <mat-option value="avanzado"> Avanzado </mat-option>
+          </mat-select>
+
+          @if (nivel?.hasError('required') && nivel?.touched) {
+            <mat-error> Seleccione un nivel </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Duración -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Duración (horas)</mat-label>
+
+          <input matInput type="number" min="1" formControlName="duracion" />
+
+          @if (duracion?.hasError('required') && duracion?.touched) {
+            <mat-error> La duración es obligatoria </mat-error>
+          }
+
+          @if (duracion?.hasError('min') && duracion?.touched) {
+            <mat-error> La duración debe ser mayor a 0 </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Docente -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Docente</mat-label>
+
+          <mat-select formControlName="docente">
+            <mat-option value="1"> Juan Pérez </mat-option>
+
+            <mat-option value="2"> María López </mat-option>
+
+            <mat-option value="3"> Carlos Gómez </mat-option>
+          </mat-select>
+
+          @if (docente?.hasError('required') && docente?.touched) {
+            <mat-error> Seleccione un docente </mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-raised-button class="btn" (click)="guardarCurso()">
+          Guardar Curso
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
