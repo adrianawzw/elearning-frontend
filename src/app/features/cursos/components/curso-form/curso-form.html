@@ -77,11 +77,11 @@
           <mat-label>Docente</mat-label>
 
           <mat-select formControlName="docente">
-            <mat-option value="1"> Juan Pérez </mat-option>
-
-            <mat-option value="2"> María López </mat-option>
-
-            <mat-option value="3"> Carlos Gómez </mat-option>
+            @for (docente of docentes; track docente.id) {
+              <mat-option [value]="docente.id">
+                {{ docente.nombres }} {{ docente.apellidos }}
+              </mat-option>
+            }
           </mat-select>
 
           @if (docente?.hasError('required') && docente?.touched) {
@@ -89,9 +89,7 @@
           }
         </mat-form-field>
 
-        <button mat-raised-button class="btn" (click)="guardarCurso()">
-          Guardar Curso
-        </button>
+        <button mat-raised-button class="btn" (click)="guardarCurso()">Guardar Curso</button>
       </form>
     </mat-card-content>
   </mat-card>
