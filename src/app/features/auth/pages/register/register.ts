@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../services/auth.service';
 
 function passwordMatch(control: AbstractControl) {
   const password = control.get('password')?.value;
@@ -19,26 +20,39 @@ function passwordMatch(control: AbstractControl) {
   styleUrl: './register.scss',
 })
 export class Register {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+
   showPassword = false;
   showConfirm = false;
+  submitted = false;
 
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      apellido: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-    }, { validators: passwordMatch });
-  }
+  form: FormGroup = this.fb.group({
+    nombre: ['', [Validators.required, Validators.minLength(2)]],
+    apellido: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', Validators.required],
+  }, { validators: passwordMatch });
 
   onSubmit() {
-    if (this.form.valid) {
-      console.log(this.form.value);
-    } else {
-      this.form.markAllAsTouched();
-    }
+    this.submitted = true;
+
+    if (this.form.invalid) return;
+
+    this.authService.register({
+      email: this.form.value.email,
+      password: this.form.value.password,
+      nombres: this.form.value.nombre,
+      apellidos: this.form.value.apellido,
+      rol: 'ESTUDIANTE'
+    }).subscribe({
+      next: () => {
+        alert('¡Registro exitoso! Ahora puedes iniciar sesión');
+      },
+      error: (err) => {
+        alert(err.message || 'Error al registrarse');
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 import { RouterOutlet } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
+import { AuthService } from '../../../auth/services/auth.service';
 
 interface MenuItem {
   icon: string;
@@ -37,6 +38,8 @@ interface MenuItem {
 })
 export class Dashboard implements OnInit, OnDestroy {
   @ViewChild('drawer') drawer!: MatDrawer;
+  private readonly authService = inject(AuthService);
+  private readonly breakpointObserver = inject(BreakpointObserver);
   // se le agrega logica login segun rol de usuario, para mostrar el dashboard correspondiente !!!
   // se inyectan servicios
   userRole: 'estudiante' | 'docente' = 'docente'; // Cambiar según el rol del usuario
@@ -69,9 +72,15 @@ export class Dashboard implements OnInit, OnDestroy {
     return this.userRole === 'docente' ? this.docenteMenu : this.estudianteMenu;
   }
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
+    if (this.authService.isDocente()) {
+      this.userRole = 'docente';
+    } else {
+      this.userRole = 'estudiante';
+    }
+    const session = this.authService.getUserSession();
+    this.userEmail = session?.email || '';
     this.handsetSub = this.breakpointObserver.observe('(max-width: 768px)').subscribe((res) => {
       this.isHandset = res.matches;
       if (this.isHandset && this.drawer) {
@@ -81,9 +90,8 @@ export class Dashboard implements OnInit, OnDestroy {
   }
 
   logout() {
-    console.log('Cerrando sesión...');
+    this.authService.logout(); // ← CAMBIAR
   }
-
   ngOnDestroy(): void {
     if (this.handsetSub) {
       this.handsetSub.unsubscribe();
