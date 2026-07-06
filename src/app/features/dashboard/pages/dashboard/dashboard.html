@@ -5,6 +5,7 @@
       #drawer
       [mode]="isHandset ? 'over' : 'side'"
       [opened]="!isHandset"
+      [disableClose]="true"
       class="drawer"
     >
       <!-- Header -->
@@ -35,6 +36,7 @@
             [routerLink]="item.route"
             routerLinkActive="active"
             #rla="routerLinkActive"
+            [routerLinkActiveOptions]="item.exact ? { exact: true } : { exact: false }"
             [class.active]="rla.isActive"
             (click)="isHandset ? drawer.close() : null"
           >

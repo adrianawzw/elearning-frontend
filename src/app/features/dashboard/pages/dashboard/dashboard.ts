@@ -17,6 +17,7 @@ interface MenuItem {
   icon: string;
   label: string;
   route: string;
+  exact?: boolean;
 }
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,7 @@ interface MenuItem {
     MatDividerModule,
     MatToolbarModule,
     MatButtonModule,
-    MatCardModule,
+    MatCardModule,  
     MatMenuModule,
     RouterLink,
     RouterLinkActive,
@@ -54,15 +55,14 @@ export class Dashboard implements OnInit, OnDestroy {
 
   // DOCENTE
   private docenteMenu: MenuItem[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
+    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', exact: true },
     { icon: 'school', label: 'Mis Cursos', route: '/dashboard/mis-cursos' },
     { icon: 'add_circle', label: 'Crear Curso', route: '/dashboard/crear-curso' },
     { icon: 'person', label: 'Mi Perfil', route: '/dashboard/perfil' },
   ];
 
-  // ESTUDIANTE
   private estudianteMenu: MenuItem[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
+    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', exact: true },
     { icon: 'search', label: 'Catálogo', route: '/dashboard/catalogo' },
     { icon: 'school', label: 'Mis Cursos', route: '/dashboard/mis-cursos' },
     { icon: 'person', label: 'Mi Perfil', route: '/dashboard/perfil' },

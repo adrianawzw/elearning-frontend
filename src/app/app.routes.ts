@@ -15,6 +15,10 @@ import { Evaluacion } from './features/evaluaciones/pages/evaluacion/evaluacion'
 import { CursoForm } from './features/cursos/components/curso-form/curso-form';
 import { ContenidoForm } from './features/contenidos/components/contenido-form/contenido-form';
 import { DashboardDocente } from './features/dashboard/components/dashboard-docente/dashboard-docente';
+import { DashboardEstudiante } from './features/dashboard/components/dashboard-estudiante/dashboard-estudiante';
+import { Catalogo } from './features/dashboard/pages/catalogo/catalogo';
+import { MisCursosEstudiante } from './features/dashboard/pages/mis-cursos-estudiante/mis-cursos-estudiante';
+import { PerfilEstudiante } from './features/dashboard/pages/perfil-estudiante/perfil-estudiante';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -30,8 +34,10 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, 
     children: [
       { path: '', component: DashboardDocente },
+      { path: 'catalogo', component: Catalogo },
+      { path: 'mis-cursos', component: MisCursosEstudiante },
+      { path: 'perfil', component: PerfilEstudiante },
       { path: 'crear-curso', component: CursoForm },
-      { path: 'mis-cursos', component: MisCursos },
     ]
   },
 

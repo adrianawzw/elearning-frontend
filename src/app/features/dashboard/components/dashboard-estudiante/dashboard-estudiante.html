@@ -1,40 +1,32 @@
 <div class="dashboard-estudiante">
+
+  <!-- Header -->
   <div class="dashboard-header">
-    <h2>Panel de Estudiante</h2>
-    <p>Bienvenida de vuelta, María 👋</p>
+    <div>
+      <h2>Bienvenida de vuelta, María 👋</h2>
+      <p>{{ today }} — Sigue aprendiendo, vas muy bien</p>
+    </div>
+    <a class="btn-explorar">
+      <mat-icon>explore</mat-icon> Explorar cursos
+    </a>
   </div>
 
+  <!-- Stats -->
   <div class="stats-grid">
-    <mat-card class="stat-card">
-      <div class="stat-icon">📚</div>
-      <div class="stat-content">
-        <span class="stat-value">8</span>
-        <span class="stat-label">Cursos Activos</span>
-      </div>
-    </mat-card>
-    <mat-card class="stat-card">
-      <div class="stat-icon">✅</div>
-      <div class="stat-content">
-        <span class="stat-value">12</span>
-        <span class="stat-label">Cursos Completados</span>
-      </div>
-    </mat-card>
-    <mat-card class="stat-card">
-      <div class="stat-icon">📊</div>
-      <div class="stat-content">
-        <span class="stat-value">65%</span>
-        <span class="stat-label">Progreso General</span>
-      </div>
-    </mat-card>
-    <mat-card class="stat-card">
-      <div class="stat-icon">🏆</div>
-      <div class="stat-content">
-        <span class="stat-value">4</span>
-        <span class="stat-label">Certificados</span>
-      </div>
-    </mat-card>
+    @for (stat of stats; track stat.label) {
+      <mat-card class="stat-card" [style.border-left-color]="stat.color">
+        <div class="stat-icon" [style.background]="stat.bg">
+          <mat-icon [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value" [style.color]="stat.color">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </mat-card>
+    }
   </div>
 
+  <!-- Gráfica -->
   <mat-card class="chart-card">
     <mat-card-header>
       <mat-card-title>Videos vistos (Día)</mat-card-title>
@@ -46,7 +38,7 @@
             <div
               class="chart-bar"
               [style.height.%]="item.views"
-              [style.background]="item.views > 75 ? 'var(--primary)' : 'var(--gray-light)'"
+              [style.background]="item.views > 75 ? '#49BBBD' : '#E0F7F7'"
             >
               <span class="chart-value">{{ item.views }}%</span>
             </div>
@@ -57,11 +49,12 @@
     </mat-card-content>
   </mat-card>
 
+  <!-- Bottom -->
   <div class="dashboard-bottom">
-    <!-- Actividades -->
+
     <mat-card class="activities-card">
       <mat-card-header>
-        <mat-card-title>Actividades de Aprendizaje</mat-card-title>
+        <mat-card-title><mat-icon>menu_book</mat-icon> Actividades de Aprendizaje</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         @for (course of activeCourses; track course.title) {
@@ -77,11 +70,7 @@
                   <span class="category-chip">{{ course.category }}</span>
                   <span class="progress-text">{{ course.progress }}%</span>
                 </div>
-                <mat-progress-bar
-                  mode="determinate"
-                  [value]="course.progress"
-                  class="activity-progress"
-                ></mat-progress-bar>
+                <mat-progress-bar mode="determinate" [value]="course.progress" class="activity-progress"></mat-progress-bar>
               </div>
             </div>
             <button mat-icon-button class="activity-btn">
@@ -94,30 +83,18 @@
 
     <mat-card class="categories-card">
       <mat-card-header>
-        <mat-card-title>Categorías</mat-card-title>
+        <mat-card-title><mat-icon>category</mat-icon> Categorías</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="category-item">
-          <span class="category-dot" style="background: var(--primary)"></span>
-          <span>Avanzado</span>
-          <span class="category-count">12 cursos</span>
-        </div>
-        <div class="category-item">
-          <span class="category-dot" style="background: var(--secondary)"></span>
-          <span>Certificado</span>
-          <span class="category-count">8 cursos</span>
-        </div>
-        <div class="category-item">
-          <span class="category-dot" style="background: var(--accent)"></span>
-          <span>Principiante</span>
-          <span class="category-count">15 cursos</span>
-        </div>
-        <div class="category-item">
-          <span class="category-dot" style="background: #6c63ff"></span>
-          <span>Profesional</span>
-          <span class="category-count">6 cursos</span>
-        </div>
+        @for (cat of categorias; track cat.label) {
+          <div class="category-item">
+            <span class="category-dot" [style.background]="cat.color"></span>
+            <span>{{ cat.label }}</span>
+            <span class="category-count">{{ cat.count }} cursos</span>
+          </div>
+        }
       </mat-card-content>
     </mat-card>
+
   </div>
 </div>

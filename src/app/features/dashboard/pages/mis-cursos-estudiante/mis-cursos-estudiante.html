@@ -1,0 +1,109 @@
+<div class="mis-cursos-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2>Mis Cursos</h2>
+      <p>Continúa donde lo dejaste y alcanza tus metas</p>
+    </div>
+    <div class="header-badges">
+      <span class="badge-activos"><mat-icon>play_circle</mat-icon> {{ activos.length }} en progreso</span>
+      <span class="badge-completados"><mat-icon>check_circle</mat-icon> {{ completados.length }} completados</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <mat-tab-group class="cursos-tabs" animationDuration="200ms">
+
+    <!-- En Progreso -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>play_circle</mat-icon>&nbsp; En Progreso ({{ activos.length }})
+      </ng-template>
+
+      <div class="cursos-grid">
+        @for (curso of activos; track curso.id) {
+          <mat-card class="curso-card">
+            <div class="curso-img-wrap">
+              <img [src]="curso.img" [alt]="curso.titulo" class="curso-img" />
+              <span class="categoria-badge">{{ curso.categoria }}</span>
+            </div>
+            <div class="curso-body">
+              <h4>{{ curso.titulo }}</h4>
+              <p class="docente"><mat-icon>person</mat-icon> {{ curso.docente }}</p>
+
+              <div class="progreso-section">
+                <div class="progreso-header">
+                  <span class="progreso-label">Progreso del curso</span>
+                  <span class="progreso-valor" [style.color]="getProgresoColor(curso.progreso)">{{ curso.progreso }}%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" [style.width.%]="curso.progreso" [style.background]="getProgresoColor(curso.progreso)"></div>
+                </div>
+                <div class="progreso-meta">
+                  <span><mat-icon>schedule</mat-icon> {{ curso.completadas }} / {{ curso.duracion }}</span>
+                  <span><mat-icon>history</mat-icon> {{ curso.ultimaActividad }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="curso-footer">
+              <button class="btn-continuar">
+                <mat-icon>play_arrow</mat-icon> Continuar
+              </button>
+            </div>
+          </mat-card>
+        }
+      </div>
+    </mat-tab>
+
+    <!-- Completados -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>check_circle</mat-icon>&nbsp; Completados ({{ completados.length }})
+      </ng-template>
+
+      <div class="cursos-grid">
+        @for (curso of completados; track curso.id) {
+          <mat-card class="curso-card completado">
+            <div class="curso-img-wrap">
+              <img [src]="curso.img" [alt]="curso.titulo" class="curso-img" />
+              <span class="categoria-badge">{{ curso.categoria }}</span>
+              <div class="completado-overlay">
+                <mat-icon>check_circle</mat-icon>
+                <span>Completado</span>
+              </div>
+            </div>
+            <div class="curso-body">
+              <h4>{{ curso.titulo }}</h4>
+              <p class="docente"><mat-icon>person</mat-icon> {{ curso.docente }}</p>
+
+              <div class="progreso-section">
+                <div class="progreso-header">
+                  <span class="progreso-label">Completado</span>
+                  <span class="progreso-valor" style="color: #4CAF50">100%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: 100%; background: #4CAF50"></div>
+                </div>
+                <div class="progreso-meta">
+                  <span><mat-icon>schedule</mat-icon> {{ curso.duracion }} totales</span>
+                  <span><mat-icon>history</mat-icon> {{ curso.ultimaActividad }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="curso-footer completado-footer">
+              <button class="btn-certificado">
+                <mat-icon>workspace_premium</mat-icon> Certificado
+              </button>
+              <button class="btn-repasar">
+                <mat-icon>replay</mat-icon> Repasar
+              </button>
+            </div>
+          </mat-card>
+        }
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>

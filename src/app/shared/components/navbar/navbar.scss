@@ -37,6 +37,13 @@
   }
 
   .brand-text {
+    color: var(--white);
+    -webkit-text-fill-color: var(--white);
+  }
+}
+
+.scrolled .navbar-brand {
+  .brand-text {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -97,7 +104,7 @@
 
     a {
       font-weight: 500;
-      color: var(--gray-dark);
+      color: rgba(255, 255, 255, 0.9);
       transition: var(--transition);
       position: relative;
 
@@ -108,12 +115,12 @@
         left: 0;
         width: 0;
         height: 2px;
-        background: var(--primary);
+        background: var(--white);
         transition: var(--transition);
       }
 
       &:hover {
-        color: var(--primary);
+        color: var(--white);
 
         &::after {
           width: 100%;
@@ -121,10 +128,26 @@
       }
 
       &.active {
-        color: var(--primary);
+        color: var(--white);
+        font-weight: 700;
         &::after { width: 100%; }
       }
     }
+  }
+}
+
+.scrolled .navbar-links ul a {
+  color: var(--gray-dark);
+
+  &::after { background: var(--primary); }
+
+  &:hover {
+    color: var(--primary);
+  }
+
+  &.active {
+    color: var(--primary);
+    font-weight: 700;
   }
 }
 
@@ -134,13 +157,18 @@
   gap: 0.75rem;
 
   .btn-ghost {
-    color: var(--gray-dark);
+    color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
     padding: 0.5rem 1rem;
 
     &:hover {
-      color: var(--primary);
+      color: var(--white);
     }
+  }
+
+  .scrolled & .btn-ghost {
+    color: var(--gray-dark);
+    &:hover { color: var(--primary); }
   }
 
   .btn-primary {
