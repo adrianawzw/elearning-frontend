@@ -17,6 +17,7 @@ interface MenuItem {
   icon: string;
   label: string;
   route: string;
+  exact?: boolean;
 }
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,7 @@ interface MenuItem {
     MatDividerModule,
     MatToolbarModule,
     MatButtonModule,
-    MatCardModule,
+    MatCardModule,  
     MatMenuModule,
     RouterLink,
     RouterLinkActive,
@@ -42,27 +43,28 @@ export class Dashboard implements OnInit, OnDestroy {
   private readonly breakpointObserver = inject(BreakpointObserver);
   // se le agrega logica login segun rol de usuario, para mostrar el dashboard correspondiente !!!
   // se inyectan servicios
-  userRole: 'estudiante' | 'docente' = 'docente'; // Cambiar según el rol del usuario
+  userRole: 'estudiante' | 'docente' = 'docente';
 
-  userName = 'María García';
-  userEmail = 'maria@email.com';
-  userAvatar =
-    'https://ui-avatars.com/api/?name=Maria+Garcia&size=40&background=49BBBD&color=fff&bold=true';
+  userName = '';
+  userEmail = '';
+  userAvatar = 'https://ui-avatars.com/api/?name=Usuario&size=40&background=49BBBD&color=fff&bold=true';
 
   isHandset = false;
   private handsetSub?: Subscription;
 
   // DOCENTE
   private docenteMenu: MenuItem[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
-    { icon: 'school', label: 'Mis Cursos', route: '/dashboard/mis-cursos' },
+    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', exact: true },
+    { icon: 'menu_book', label: 'Gestionar Cursos', route: '/dashboard/gestionar-cursos' },
     { icon: 'add_circle', label: 'Crear Curso', route: '/dashboard/crear-curso' },
-    { icon: 'person', label: 'Mi Perfil', route: '/dashboard/perfil' },
+    { icon: 'folder', label: 'Gestionar Contenidos', route: '/dashboard/gestionar-contenidos' },
+    { icon: 'post_add', label: 'Crear Contenido', route: '/dashboard/crear-contenido' },
+    { icon: 'quiz', label: 'Gestionar Evaluaciones', route: '/dashboard/gestionar-evaluaciones' },
+    { icon: 'add_task', label: 'Crear Evaluación', route: '/dashboard/crear-evaluacion' },
   ];
 
-  // ESTUDIANTE
   private estudianteMenu: MenuItem[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
+    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', exact: true },
     { icon: 'search', label: 'Catálogo', route: '/dashboard/catalogo' },
     { icon: 'school', label: 'Mis Cursos', route: '/dashboard/mis-cursos' },
     { icon: 'person', label: 'Mi Perfil', route: '/dashboard/perfil' },
@@ -74,13 +76,11 @@ export class Dashboard implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    if (this.authService.isDocente()) {
-      this.userRole = 'docente';
-    } else {
-      this.userRole = 'estudiante';
-    }
-    const session = this.authService.getUserSession();
-    this.userEmail = session?.email || '';
+    // TODO: reemplazar con authService cuando el backend esté conectado
+    this.userRole = 'docente';
+    this.userName = 'Prof. Carlos';
+    this.userEmail = 'carlos@email.com';
+    this.userAvatar = `https://ui-avatars.com/api/?name=Prof+Carlos&size=40&background=49BBBD&color=fff&bold=true`;
     this.handsetSub = this.breakpointObserver.observe('(max-width: 768px)').subscribe((res) => {
       this.isHandset = res.matches;
       if (this.isHandset && this.drawer) {

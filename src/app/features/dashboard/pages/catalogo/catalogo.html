@@ -1,0 +1,55 @@
+<div class="catalogo-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2>Catálogo de Cursos</h2>
+      <p>Explora todos los cursos disponibles y amplía tus conocimientos</p>
+    </div>
+    <div class="header-stats">
+      <span class="stat-badge"><mat-icon>menu_book</mat-icon> {{ cursos.length }} cursos</span>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-bar">
+    @for (cat of categorias; track cat) {
+      <button class="filtro-btn" [class.active]="categoriaActiva === cat" (click)="setCategoria(cat)">
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  <!-- Grid -->
+  <div class="cursos-grid">
+    @for (curso of cursosFiltrados; track curso.id) {
+      <mat-card class="curso-card">
+        <div class="curso-img-wrap">
+          <img [src]="curso.img" [alt]="curso.titulo" class="curso-img" />
+          <span class="nivel-badge" [style.background]="getNivelColor(curso.nivel)">{{ curso.nivel }}</span>
+          @if (curso.inscrito) {
+            <span class="inscrito-badge"><mat-icon>check_circle</mat-icon> Inscrito</span>
+          }
+        </div>
+        <mat-card-content class="curso-body">
+          <span class="categoria-tag">{{ curso.categoria }}</span>
+          <h4>{{ curso.titulo }}</h4>
+          <p class="docente"><mat-icon>person</mat-icon> {{ curso.docente }}</p>
+          <div class="curso-meta">
+            <span><mat-icon>group</mat-icon> {{ curso.estudiantes }}</span>
+            <span><mat-icon>schedule</mat-icon> {{ curso.duracion }}</span>
+            <span><mat-icon>star</mat-icon> {{ curso.rating }}</span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions class="curso-footer">
+          <span class="precio" [class.gratis]="curso.precio === 'Gratis'">{{ curso.precio }}</span>
+          <button mat-flat-button [class]="curso.inscrito ? 'btn-continuar' : 'btn-inscribir'">
+            <mat-icon>{{ curso.inscrito ? 'play_arrow' : 'add' }}</mat-icon>
+            {{ curso.inscrito ? 'Continuar' : 'Inscribirse' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+
+</div>

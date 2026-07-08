@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
 import { CursoService } from '../../services/curso.service';
@@ -22,6 +23,7 @@ import { Usuario } from '../../interfaces/usuario.interface';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
+    MatIconModule,
   ],
   templateUrl: './curso-form.html',
   styleUrl: './curso-form.scss',
