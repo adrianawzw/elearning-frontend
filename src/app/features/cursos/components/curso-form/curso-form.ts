@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -8,6 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+
+import { CursoService } from '../../services/curso.service';
+import { Usuario } from '../../interfaces/usuario.interface';
 
 @Component({
   selector: 'app-curso-form',
@@ -25,8 +28,10 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './curso-form.html',
   styleUrl: './curso-form.scss',
 })
-export class CursoForm {
+export class CursoForm implements OnInit {
   private fb = inject(FormBuilder);
+  private cursoService = inject(CursoService);
+  docentes: Usuario[] = [];
 
   cursoForm = this.fb.group({
     titulo: ['', [Validators.required, Validators.minLength(5)]],
@@ -67,5 +72,17 @@ export class CursoForm {
 
   get docente() {
     return this.cursoForm.get('docente');
+  }
+
+  ngOnInit(): void {
+    this.cursoService.obtenerDocentes().subscribe({
+      next: (data) => {
+        this.docentes = data;
+        console.log(data);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 }

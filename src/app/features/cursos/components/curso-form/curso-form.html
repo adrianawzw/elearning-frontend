@@ -64,11 +64,15 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Docente</mat-label>
       <mat-icon matPrefix>person</mat-icon>
+      
       <mat-select formControlName="docente">
-        <mat-option value="1">Juan Pérez</mat-option>
-        <mat-option value="2">María López</mat-option>
-        <mat-option value="3">Carlos Gómez</mat-option>
+        @for (docente of docentes; track docente.id) {
+          <mat-option [value]="docente.id">
+            {{ docente.nombres }} {{ docente.apellidos }}
+          </mat-option>
+        }
       </mat-select>
+
       @if (docente?.hasError('required') && docente?.touched) {
         <mat-error>Seleccione un docente</mat-error>
       }
