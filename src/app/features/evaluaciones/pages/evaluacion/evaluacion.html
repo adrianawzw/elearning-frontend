@@ -1,1 +1,138 @@
-<p>evaluacion works!</p>
+<!-- MODO CREAR (Docente) -->
+@if (modo === 'crear') {
+  <div class="page-header">
+    <h2>Crear Evaluación</h2>
+    <p>Diseña una evaluación para tus estudiantes</p>
+  </div>
+
+  <div class="form-card">
+    <p class="form-section-title"><mat-icon>quiz</mat-icon> Información de la Evaluación</p>
+
+    <form [formGroup]="evalForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Título de la evaluación</mat-label>
+        <mat-icon matPrefix>title</mat-icon>
+        <input matInput formControlName="titulo" placeholder="Ej: Evaluación Final Angular" />
+        @if (evalForm.get('titulo')?.hasError('required') && evalForm.get('titulo')?.touched) {
+          <mat-error>El título es obligatorio</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <mat-icon matPrefix>description</mat-icon>
+        <textarea matInput rows="3" formControlName="descripcion" placeholder="Describe el objetivo de la evaluación..."></textarea>
+        @if (evalForm.get('descripcion')?.hasError('required') && evalForm.get('descripcion')?.touched) {
+          <mat-error>La descripción es obligatoria</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Curso asociado</mat-label>
+          <mat-icon matPrefix>menu_book</mat-icon>
+          <mat-select formControlName="cursoId">
+            <mat-option value="14">Spring Boot: De Cero a Experto</mat-option>
+            <mat-option value="16">Cálculo I</mat-option>
+            <mat-option value="17">Angular desde Cero</mat-option>
+            <mat-option value="18">Python para Datos</mat-option>
+          </mat-select>
+          @if (evalForm.get('cursoId')?.hasError('required') && evalForm.get('cursoId')?.touched) {
+            <mat-error>Seleccione un curso</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Duración (minutos)</mat-label>
+          <mat-icon matPrefix>timer</mat-icon>
+          <input matInput type="number" min="1" formControlName="duracion" placeholder="Ej: 60" />
+          @if (evalForm.get('duracion')?.hasError('required') && evalForm.get('duracion')?.touched) {
+            <mat-error>La duración es obligatoria</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-guardar" (click)="guardarEvaluacion()">
+          <mat-icon>save</mat-icon> Guardar Evaluación
+        </button>
+        <button class="btn-cancelar" type="button">
+          <mat-icon>close</mat-icon> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+}
+
+<!-- MODO RESOLVER (Estudiante) -->
+@if (modo === 'resolver') {
+  <div class="page-header">
+    <h2>Evaluación Final</h2>
+    <p>Angular desde Cero — {{ preguntas.length }} preguntas</p>
+  </div>
+
+  @if (!enviado) {
+    <div class="evaluacion-wrap">
+      <!-- Progreso -->
+      <div class="eval-progreso">
+        @for (p of preguntas; track $index) {
+          <div class="prog-dot"
+            [class.activo]="$index === preguntaActual"
+            [class.respondido]="respuestas[$index] !== null"
+            (click)="preguntaActual = $index">
+            {{ $index + 1 }}
+          </div>
+        }
+      </div>
+
+      <!-- Pregunta -->
+      <div class="pregunta-card">
+        <div class="pregunta-header">
+          <span class="pregunta-num">Pregunta {{ preguntaActual + 1 }} de {{ preguntas.length }}</span>
+        </div>
+        <h3 class="pregunta-texto">{{ preguntas[preguntaActual].texto }}</h3>
+
+        <div class="opciones">
+          @for (opcion of preguntas[preguntaActual].opciones; track $index) {
+            <div class="opcion" [class.seleccionada]="respuestas[preguntaActual] === $index" (click)="seleccionar($index)">
+              <span class="opcion-letra">{{ ['A','B','C','D'][$index] }}</span>
+              <span>{{ opcion }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="eval-nav">
+          <button class="btn-nav" (click)="anterior()" [disabled]="preguntaActual === 0">
+            <mat-icon>arrow_back</mat-icon> Anterior
+          </button>
+          @if (preguntaActual < preguntas.length - 1) {
+            <button class="btn-nav primary" (click)="siguiente()">
+              Siguiente <mat-icon>arrow_forward</mat-icon>
+            </button>
+          } @else {
+            <button class="btn-nav success" (click)="enviar()">
+              <mat-icon>send</mat-icon> Enviar
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (enviado) {
+    <div class="resultado-wrap">
+      <div class="resultado-card" [class.aprobado]="aprobado" [class.reprobado]="!aprobado">
+        <mat-icon class="resultado-icon">{{ aprobado ? 'emoji_events' : 'sentiment_dissatisfied' }}</mat-icon>
+        <h3>{{ aprobado ? '¡Felicitaciones!' : 'Sigue intentando' }}</h3>
+        <div class="puntaje-circle" [style.border-color]="aprobado ? '#4CAF50' : '#F44336'">
+          <span class="puntaje-num" [style.color]="aprobado ? '#4CAF50' : '#F44336'">{{ porcentaje }}%</span>
+          <span class="puntaje-label">{{ puntaje }}/{{ preguntas.length }} correctas</span>
+        </div>
+        <p>{{ aprobado ? 'Has aprobado la evaluación exitosamente.' : 'No alcanzaste el puntaje mínimo (60%). Puedes volver a intentarlo.' }}</p>
+        <button class="btn-guardar">
+          <mat-icon>home</mat-icon> Volver al Dashboard
+        </button>
+      </div>
+    </div>
+  }
+}

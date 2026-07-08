@@ -4,10 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-mis-cursos-estudiante',
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatProgressBarModule, MatTabsModule],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatProgressBarModule, MatTabsModule, RouterLink],
   templateUrl: './mis-cursos-estudiante.html',
   styleUrl: './mis-cursos-estudiante.scss',
 })

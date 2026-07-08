@@ -1,0 +1,77 @@
+<div class="page-header">
+  <div>
+    <h2>Gestionar Cursos</h2>
+    <p>Administra y edita tus cursos publicados</p>
+  </div>
+  <a class="btn-nuevo" routerLink="/dashboard/crear-curso">
+    <mat-icon>add_circle</mat-icon> Nuevo Curso
+  </a>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-item">
+    <div class="stat-icon" style="background: #E0F7F7">
+      <mat-icon style="color: #49BBBD">menu_book</mat-icon>
+    </div>
+    <div>
+      <span class="stat-val">{{ cursos.length }}</span>
+      <span class="stat-lbl">Total cursos</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon" style="background: #E8F5E9">
+      <mat-icon style="color: #4CAF50">check_circle</mat-icon>
+    </div>
+    <div>
+      <span class="stat-val">{{ cursosPublicados }}</span>
+      <span class="stat-lbl">Publicados</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon" style="background: #FFF3E0">
+      <mat-icon style="color: #F48C06">people</mat-icon>
+    </div>
+    <div>
+      <span class="stat-val">{{ totalEstudiantes }}</span>
+      <span class="stat-lbl">Estudiantes</span>
+    </div>
+  </div>
+</div>
+
+<!-- Grid -->
+<div class="cursos-grid">
+  @for (curso of cursos; track curso.id) {
+    <div class="curso-card">
+      <div class="curso-img-wrap">
+        <img [src]="curso.img" [alt]="curso.titulo" class="curso-img" />
+        <span class="nivel-badge" [style.background]="getNivelColor(curso.nivel)">{{ curso.nivel }}</span>
+        <span class="estado-badge" [class.publicado]="curso.estado === 'publicado'" [class.borrador]="curso.estado === 'borrador'">
+          {{ curso.estado === 'publicado' ? 'Publicado' : 'Borrador' }}
+        </span>
+      </div>
+      <div class="curso-body">
+        <span class="categoria-tag">{{ curso.categoria }}</span>
+        <h4>{{ curso.titulo }}</h4>
+        <div class="curso-meta">
+          <span><mat-icon>people</mat-icon> {{ curso.estudiantes }} estudiantes</span>
+          <span><mat-icon>star</mat-icon> {{ curso.rating }}</span>
+        </div>
+        <div class="progreso-wrap">
+          <div class="progreso-header">
+            <span>Contenido completado</span>
+            <span class="progreso-val">{{ curso.progreso }}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="curso.progreso"></div>
+          </div>
+        </div>
+      </div>
+      <div class="curso-actions">
+        <button class="btn-editar"><mat-icon>edit</mat-icon> Editar</button>
+        <button class="btn-contenido"><mat-icon>folder</mat-icon> Contenido</button>
+        <button class="btn-eliminar"><mat-icon>delete</mat-icon></button>
+      </div>
+    </div>
+  }
+</div>

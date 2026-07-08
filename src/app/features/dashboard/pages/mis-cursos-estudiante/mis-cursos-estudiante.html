@@ -47,9 +47,9 @@
               </div>
             </div>
             <div class="curso-footer">
-              <button class="btn-continuar">
+              <a class="btn-continuar" [routerLink]="['/dashboard/ver-curso', curso.id]">
                 <mat-icon>play_arrow</mat-icon> Continuar
-              </button>
+              </a>
             </div>
           </mat-card>
         }
@@ -95,9 +95,9 @@
               <button class="btn-certificado">
                 <mat-icon>workspace_premium</mat-icon> Certificado
               </button>
-              <button class="btn-repasar">
+              <a class="btn-repasar" [routerLink]="['/dashboard/ver-curso', curso.id]">
                 <mat-icon>replay</mat-icon> Repasar
-              </button>
+              </a>
             </div>
           </mat-card>
         }

@@ -6,7 +6,7 @@
       <h2>Bienvenida de vuelta, María 👋</h2>
       <p>{{ today }} — Sigue aprendiendo, vas muy bien</p>
     </div>
-    <a class="btn-explorar">
+    <a class="btn-explorar" routerLink="/dashboard/catalogo">
       <mat-icon>explore</mat-icon> Explorar cursos
     </a>
   </div>
@@ -73,7 +73,7 @@
                 <mat-progress-bar mode="determinate" [value]="course.progress" class="activity-progress"></mat-progress-bar>
               </div>
             </div>
-            <button mat-icon-button class="activity-btn">
+            <button mat-icon-button class="activity-btn" [routerLink]="['/dashboard/ver-curso', course.id]">
               <mat-icon>chevron_right</mat-icon>
             </button>
           </div>

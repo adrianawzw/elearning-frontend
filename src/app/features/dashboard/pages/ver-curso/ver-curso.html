@@ -1,0 +1,117 @@
+<div class="ver-curso-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <a class="btn-volver" routerLink="/dashboard/mis-cursos">
+        <mat-icon>arrow_back</mat-icon> Mis Cursos
+      </a>
+      <div>
+        <h2>{{ curso.titulo }}</h2>
+        <p><mat-icon>person</mat-icon> {{ curso.docente }}</p>
+      </div>
+    </div>
+    <div class="header-progreso">
+      <span class="progreso-txt">{{ completadas }}/{{ lecciones.length }} lecciones</span>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="curso.progreso"></div>
+      </div>
+      <span class="progreso-pct">{{ curso.progreso }}%</span>
+    </div>
+  </div>
+
+  <!-- Layout principal -->
+  <div class="curso-layout">
+
+    <!-- Reproductor / Contenido -->
+    <div class="contenido-main">
+      <div class="video-wrap">
+        <img [src]="curso.img" [alt]="curso.titulo" class="video-placeholder" />
+        <div class="video-overlay">
+          <button class="btn-play"><mat-icon>play_circle</mat-icon></button>
+        </div>
+      </div>
+
+      <mat-tab-group class="info-tabs" animationDuration="200ms">
+        <mat-tab label="Descripción">
+          <div class="tab-content">
+            <h3>{{ leccionActual.titulo }}</h3>
+            <p>{{ curso.descripcion }}</p>
+            <div class="leccion-meta">
+              <span><mat-icon>schedule</mat-icon> {{ leccionActual.duracion }}</span>
+              <span><mat-icon>{{ getTipoIcon(leccionActual.tipo) }}</mat-icon> {{ leccionActual.tipo }}</span>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Recursos">
+          <div class="tab-content">
+            <div class="recurso-item">
+              <mat-icon>picture_as_pdf</mat-icon>
+              <span>Material de apoyo - Módulo 1.pdf</span>
+              <button class="btn-descargar"><mat-icon>download</mat-icon></button>
+            </div>
+            <div class="recurso-item">
+              <mat-icon>link</mat-icon>
+              <span>Documentación oficial Angular</span>
+              <button class="btn-descargar"><mat-icon>open_in_new</mat-icon></button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Evaluación">
+          <div class="tab-content">
+            <div class="eval-promo">
+              <mat-icon>quiz</mat-icon>
+              <h4>Evaluación del módulo</h4>
+              <p>Pon a prueba lo que aprendiste en este módulo</p>
+              <a class="btn-eval" routerLink="/dashboard/evaluacion">
+                <mat-icon>play_arrow</mat-icon> Iniciar Evaluación
+              </a>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <div class="nav-lecciones">
+        <button class="btn-nav" [disabled]="leccionActiva === 0" (click)="leccionActiva = leccionActiva - 1">
+          <mat-icon>arrow_back</mat-icon> Anterior
+        </button>
+        <button class="btn-completar" (click)="marcarCompletada()" [disabled]="leccionActual.completada">
+          <mat-icon>{{ leccionActual.completada ? 'check_circle' : 'check' }}</mat-icon>
+          {{ leccionActual.completada ? 'Completada' : 'Marcar como completada' }}
+        </button>
+        <button class="btn-nav" [disabled]="leccionActiva === lecciones.length - 1" (click)="leccionActiva = leccionActiva + 1">
+          Siguiente <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de lecciones -->
+    <div class="lecciones-sidebar">
+      <div class="sidebar-header">
+        <h4>Contenido del curso</h4>
+        <span>{{ completadas }}/{{ lecciones.length }}</span>
+      </div>
+      <div class="lecciones-list">
+        @for (leccion of lecciones; track leccion.id; let i = $index) {
+          <div class="leccion-item"
+            [class.activa]="i === leccionActiva"
+            [class.completada]="leccion.completada"
+            (click)="leccionActiva = i">
+            <div class="leccion-icon">
+              @if (leccion.completada) {
+                <mat-icon class="icon-check">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="icon-tipo">{{ getTipoIcon(leccion.tipo) }}</mat-icon>
+              }
+            </div>
+            <div class="leccion-info">
+              <span class="leccion-titulo">{{ leccion.titulo }}</span>
+              <span class="leccion-dur">{{ leccion.duracion }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</div>

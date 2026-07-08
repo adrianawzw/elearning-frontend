@@ -5,10 +5,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-estudiante',
-  imports: [CommonModule, MatCardModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatChipsModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatChipsModule, RouterLink],
   templateUrl: './dashboard-estudiante.html',
   styleUrl: './dashboard-estudiante.scss',
 })
@@ -38,10 +39,10 @@ export class DashboardEstudiante {
   ];
 
   activeCourses = [
-    { title: 'Desarrollo Web Avanzado', description: 'Práctica y teoría sobre desarrollo web avanzado.', progress: 75, category: 'Programación', image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=120&h=80&fit=crop' },
-    { title: 'Power BI para Principiantes', description: 'Análisis de datos y visualización con Power BI.', progress: 40, category: 'Certificación', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=80&fit=crop' },
-    { title: 'Data Science Básico', description: 'Fundamentos de data science con Python.', progress: 90, category: 'Datos', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=120&h=80&fit=crop' },
-    { title: 'UI/UX Design', description: 'Diseño de interfaces y experiencia de usuario.', progress: 25, category: 'Diseño', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=120&h=80&fit=crop' },
+    { id: 1, title: 'Desarrollo Web Avanzado', description: 'Práctica y teoría sobre desarrollo web avanzado.', progress: 75, category: 'Programación', image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=120&h=80&fit=crop' },
+    { id: 2, title: 'Power BI para Principiantes', description: 'Análisis de datos y visualización con Power BI.', progress: 40, category: 'Certificación', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=80&fit=crop' },
+    { id: 3, title: 'Data Science Básico', description: 'Fundamentos de data science con Python.', progress: 90, category: 'Datos', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=120&h=80&fit=crop' },
+    { id: 4, title: 'UI/UX Design', description: 'Diseño de interfaces y experiencia de usuario.', progress: 25, category: 'Diseño', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=120&h=80&fit=crop' },
   ];
 
   categorias = [

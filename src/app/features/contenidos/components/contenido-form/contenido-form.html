@@ -1,83 +1,73 @@
-<div class="container">
-  <mat-card class="card">
-    <mat-card-header>
-      <mat-card-title>Crear Contenido</mat-card-title>
-    </mat-card-header>
+<div class="page-header">
+  <h2>Crear Contenido</h2>
+  <p>Agrega material de aprendizaje a un curso existente</p>
+</div>
 
-    <mat-card-content>
-      <form [formGroup]="contenidoForm">
-        <!-- Título -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Título del contenido</mat-label>
+<div class="form-card">
+  <p class="form-section-title"><mat-icon>folder_open</mat-icon> Información del Contenido</p>
 
-          <input matInput formControlName="titulo" />
+  <form [formGroup]="contenidoForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Título del contenido</mat-label>
+      <mat-icon matPrefix>title</mat-icon>
+      <input matInput formControlName="titulo" placeholder="Ej: Introducción a Angular" />
+      @if (titulo?.hasError('required') && titulo?.touched) {
+        <mat-error>El título es obligatorio</mat-error>
+      }
+      @if (titulo?.hasError('minlength') && titulo?.touched) {
+        <mat-error>Mínimo 5 caracteres</mat-error>
+      }
+    </mat-form-field>
 
-          @if (titulo?.hasError('required') && titulo?.touched) {
-            <mat-error> El título es obligatorio </mat-error>
-          }
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>URL del material</mat-label>
+      <mat-icon matPrefix>link</mat-icon>
+      <input matInput formControlName="urlMaterial" placeholder="https://youtube.com/..." />
+      @if (urlMaterial?.hasError('required') && urlMaterial?.touched) {
+        <mat-error>La URL es obligatoria</mat-error>
+      }
+      @if (urlMaterial?.hasError('pattern') && urlMaterial?.touched) {
+        <mat-error>Ingrese una URL válida</mat-error>
+      }
+    </mat-form-field>
 
-          @if (titulo?.hasError('minlength') && titulo?.touched) {
-            <mat-error> El título debe tener al menos 5 caracteres </mat-error>
-          }
-        </mat-form-field>
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo de contenido</mat-label>
+        <mat-icon matPrefix>category</mat-icon>
+        <mat-select formControlName="tipo">
+          <mat-option value="VIDEO">Video</mat-option>
+          <mat-option value="PDF">PDF</mat-option>
+          <mat-option value="PRESENTACION">Presentación</mat-option>
+          <mat-option value="ENLACE">Enlace Externo</mat-option>
+        </mat-select>
+        @if (tipo?.hasError('required') && tipo?.touched) {
+          <mat-error>Seleccione un tipo</mat-error>
+        }
+      </mat-form-field>
 
-        <!-- URL Material -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>URL del material</mat-label>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Curso asociado</mat-label>
+        <mat-icon matPrefix>menu_book</mat-icon>
+        <mat-select formControlName="cursoId">
+          <mat-option value="14">Spring Boot: De Cero a Experto</mat-option>
+          <mat-option value="16">Cálculo I</mat-option>
+          <mat-option value="17">Función Lineal</mat-option>
+          <mat-option value="18">Química Inorgánica</mat-option>
+        </mat-select>
+        @if (cursoId?.hasError('required') && cursoId?.touched) {
+          <mat-error>Seleccione un curso</mat-error>
+        }
+      </mat-form-field>
+    </div>
 
-          <input matInput formControlName="urlMaterial" placeholder="https://youtube.com/..." />
-
-          @if (urlMaterial?.hasError('required') && urlMaterial?.touched) {
-            <mat-error> La URL es obligatoria </mat-error>
-          }
-
-          @if (urlMaterial?.hasError('pattern') && urlMaterial?.touched) {
-            <mat-error> Ingrese una URL válida </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Tipo -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Tipo de contenido</mat-label>
-
-          <mat-select formControlName="tipo">
-            <mat-option value="VIDEO"> Video </mat-option>
-
-            <mat-option value="PDF"> PDF </mat-option>
-
-            <mat-option value="PRESENTACION"> Presentación </mat-option>
-
-            <mat-option value="ENLACE"> Enlace Externo </mat-option>
-          </mat-select>
-
-          @if (tipo?.hasError('required') && tipo?.touched) {
-            <mat-error> Seleccione un tipo de contenido </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Curso -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Curso asociado</mat-label>
-
-          <mat-select formControlName="cursoId">
-            <mat-option value="14"> Spring Boot: De Cero a Experto </mat-option>
-
-            <mat-option value="16"> Cálculo I </mat-option>
-
-            <mat-option value="17"> Función Lineal </mat-option>
-
-            <mat-option value="18"> Química Inorgánica </mat-option>
-          </mat-select>
-
-          @if (cursoId?.hasError('required') && cursoId?.touched) {
-            <mat-error> Seleccione un curso </mat-error>
-          }
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" class="btn" (click)="guardarContenido()">
-          Guardar Contenido
-        </button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+    <div class="form-actions">
+      <button class="btn-guardar" (click)="guardarContenido()">
+        <mat-icon>save</mat-icon> Guardar Contenido
+      </button>
+      <button class="btn-cancelar" type="button">
+        <mat-icon>close</mat-icon> Cancelar
+      </button>
+    </div>
+  </form>
 </div>
