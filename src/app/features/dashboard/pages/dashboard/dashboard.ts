@@ -9,8 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
-import { DashboardDocente } from '../../components/dashboard-docente/dashboard-docente';
-import { DashboardEstudiante } from '../../components/dashboard-estudiante/dashboard-estudiante';
+import { RouterOutlet } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../../auth/services/auth.service';
 
@@ -31,9 +30,8 @@ interface MenuItem {
     MatCardModule,
     MatMenuModule,
     RouterLink,
-    DashboardDocente,
-    DashboardEstudiante,
     RouterLinkActive,
+    RouterOutlet
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',

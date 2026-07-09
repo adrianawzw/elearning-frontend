@@ -90,11 +90,7 @@
       </mat-toolbar>
 
       <div class="content-area">
-        @if (userRole === 'estudiante') {
-          <app-dashboard-estudiante></app-dashboard-estudiante>
-        } @else if (userRole === 'docente') {
-          <app-dashboard-docente></app-dashboard-docente>
-        }
+        <router-outlet></router-outlet>
       </div>
 
     </mat-drawer-content>
