@@ -18,6 +18,7 @@ import { ContenidoForm } from './features/contenidos/components/contenido-form/c
 import { GestionarContenidos } from './features/contenidos/pages/gestionar-contenidos/gestionar-contenidos';
 import { DashboardDocente } from './features/dashboard/components/dashboard-docente/dashboard-docente';
 import { DashboardEstudiante } from './features/dashboard/components/dashboard-estudiante/dashboard-estudiante';
+import { docenteGuard, estudianteGuard } from './shared/guards/role.guard';
 import { Catalogo } from './features/dashboard/pages/catalogo/catalogo';
 import { MisCursosEstudiante } from './features/dashboard/pages/mis-cursos-estudiante/mis-cursos-estudiante';
 import { PerfilEstudiante } from './features/dashboard/pages/perfil-estudiante/perfil-estudiante';
@@ -36,7 +37,8 @@ export const routes: Routes = [
 
   { path: 'dashboard', component: Dashboard,
     children: [
-      { path: '', component: DashboardDocente },
+      { path: '', component: DashboardDocente, canActivate: [docenteGuard] },
+      { path: 'inicio', component: DashboardEstudiante, canActivate: [estudianteGuard] },
       // Estudiante
       { path: 'catalogo', component: Catalogo },
       { path: 'mis-cursos', component: MisCursosEstudiante },

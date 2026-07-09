@@ -64,7 +64,7 @@ export class Dashboard implements OnInit, OnDestroy {
   ];
 
   private estudianteMenu: MenuItem[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', exact: true },
+    { icon: 'dashboard', label: 'Inicio', route: '/dashboard/inicio', exact: true },
     { icon: 'search', label: 'Catálogo', route: '/dashboard/catalogo' },
     { icon: 'school', label: 'Mis Cursos', route: '/dashboard/mis-cursos' },
     { icon: 'person', label: 'Mi Perfil', route: '/dashboard/perfil' },
@@ -76,11 +76,12 @@ export class Dashboard implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    // TODO: reemplazar con authService cuando el backend esté conectado
-    this.userRole = 'docente';
-    this.userName = 'Prof. Carlos';
-    this.userEmail = 'carlos@email.com';
-    this.userAvatar = `https://ui-avatars.com/api/?name=Prof+Carlos&size=40&background=49BBBD&color=fff&bold=true`;
+    const session = this.authService.getUserSession();
+    const rol = this.authService.getUserRol();
+    this.userRole = rol === 'DOCENTE' ? 'docente' : 'estudiante';
+    this.userName = session?.email?.split('@')[0] ?? 'Usuario';
+    this.userEmail = session?.email ?? '';
+    this.userAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userName)}&size=40&background=49BBBD&color=fff&bold=true`;
     this.handsetSub = this.breakpointObserver.observe('(max-width: 768px)').subscribe((res) => {
       this.isHandset = res.matches;
       if (this.isHandset && this.drawer) {
