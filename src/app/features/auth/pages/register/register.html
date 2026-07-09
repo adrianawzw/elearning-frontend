@@ -14,7 +14,8 @@
         <li><mat-icon>check_circle</mat-icon> Soporte de docentes expertos</li>
       </ul>
     </div>
-    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop" alt="Estudiantes" class="auth-bg-img" />
+    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop" alt="Estudiantes"
+      class="auth-bg-img" />
   </div>
 
   <div class="auth-right">
@@ -25,15 +26,19 @@
       </div>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
-
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-field">
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre" placeholder="Tu nombre" />
             <mat-icon matPrefix>person</mat-icon>
             @if (submitted && form.get('nombre')?.invalid) {
-              <mat-error>Nombre requerido (mín. 2 caracteres)</mat-error>
+            <mat-error>
+              @if (form.get('nombre')?.hasError('required')) { Nombre requerido }
+              @if (form.get('nombre')?.hasError('minlength')) { Mínimo 2 caracteres }
+              @if (form.get('nombre')?.hasError('pattern')) { Solo letras permitidas }
+            </mat-error>
             }
+
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-field">
@@ -41,7 +46,7 @@
             <input matInput formControlName="apellido" placeholder="Tu apellido" />
             <mat-icon matPrefix>person</mat-icon>
             @if (submitted && form.get('apellido')?.invalid) {
-              <mat-error>Apellido requerido</mat-error>
+            <mat-error>Apellido requerido</mat-error>
             }
           </mat-form-field>
         </div>
@@ -51,34 +56,50 @@
           <input matInput formControlName="email" type="email" placeholder="tu@email.com" />
           <mat-icon matPrefix>email</mat-icon>
           @if (submitted && form.get('email')?.invalid) {
-            <mat-error>
-              @if (form.get('email')?.hasError('required')) { El email es requerido }
-              @if (form.get('email')?.hasError('email')) { Ingresa un email válido }
-            </mat-error>
+          <mat-error>
+            @if (form.get('email')?.hasError('required')) {
+            El email es requerido
+            }
+            @if (form.get('email')?.hasError('email')) {
+            Ingresa un email válido
+            }
+          </mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-field">
           <mat-label>Contraseña</mat-label>
-          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Mínimo 6 caracteres" />
+          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
+            placeholder="Mínimo 6 caracteres" />
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
             <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           @if (submitted && form.get('password')?.invalid) {
-            <mat-error>Contraseña requerida (mín. 6 caracteres)</mat-error>
+          <mat-error>
+            @if (form.get('password')?.hasError('required')) {
+            Contraseña requerida
+            }
+            @if (form.get('password')?.hasError('minlength')) {
+            Mínimo 8 caracteres
+            }
+            @if (form.get('password')?.hasError('maxlength')) {
+            Máximo 15 caracteres
+            }
+          </mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-field">
           <mat-label>Confirmar contraseña</mat-label>
-          <input matInput formControlName="confirmPassword" [type]="showConfirm ? 'text' : 'password'" placeholder="Repite tu contraseña" />
+          <input matInput formControlName="confirmPassword" [type]="showConfirm ? 'text' : 'password'"
+            placeholder="Repite tu contraseña" />
           <mat-icon matPrefix>lock_reset</mat-icon>
           <button mat-icon-button matSuffix type="button" (click)="showConfirm = !showConfirm">
             <mat-icon>{{ showConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           @if (submitted && form.hasError('passwordMismatch')) {
-            <mat-error>Las contraseñas no coinciden</mat-error>
+          <mat-error>Las contraseñas no coinciden</mat-error>
           }
         </mat-form-field>
 
@@ -86,7 +107,6 @@
           <mat-icon>person_add</mat-icon>
           Crear cuenta gratis
         </button>
-
       </form>
 
       <div class="auth-divider"><span>o</span></div>

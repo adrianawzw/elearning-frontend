@@ -42,7 +42,8 @@ export class Login {
     }
 
     this.authService.login(this.form.value).subscribe({
-      next: () => {
+      next: (response: any) => {
+ console.log({ access_token: response.access_token })
         this.snackBar.open('¡Inicio de sesión exitoso!', 'Cerrar', {
           duration: 3000,
           horizontalPosition: 'end',
