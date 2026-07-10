@@ -46,7 +46,7 @@ export class AuthService {
       if (rol === 'DOCENTE') {
         this.router.navigate(['/dashboard']);
       } else {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dashboard/inicio']);
       }
     }),
     catchError((error) => {

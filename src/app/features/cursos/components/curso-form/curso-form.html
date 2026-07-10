@@ -1,90 +1,110 @@
-<div class="page-header">
-  <h2>Crear Curso</h2>
-  <p>Completa la información para publicar un nuevo curso</p>
-</div>
+<div class="form-wrapper">
+  <div class="form-card">
 
-<div class="form-card">
-  <p class="form-section-title"><mat-icon>menu_book</mat-icon> Información del Curso</p>
-
-  <form [formGroup]="cursoForm">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Título del curso</mat-label>
-      <mat-icon matPrefix>title</mat-icon>
-      <input matInput formControlName="titulo" placeholder="Ej: Angular desde Cero" />
-      @if (titulo?.hasError('required') && titulo?.touched) {
-        <mat-error>El título es obligatorio</mat-error>
-      }
-      @if (titulo?.hasError('minlength') && titulo?.touched) {
-        <mat-error>Mínimo 5 caracteres</mat-error>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Descripción</mat-label>
-      <mat-icon matPrefix>description</mat-icon>
-      <textarea matInput rows="4" formControlName="descripcion" placeholder="Describe el contenido del curso..."></textarea>
-      @if (descripcion?.hasError('required') && descripcion?.touched) {
-        <mat-error>La descripción es obligatoria</mat-error>
-      }
-      @if (descripcion?.hasError('minlength') && descripcion?.touched) {
-        <mat-error>Mínimo 10 caracteres</mat-error>
-      }
-      @if (descripcion?.hasError('maxlength') && descripcion?.touched) {
-        <mat-error>Máximo 300 caracteres</mat-error>
-      }
-    </mat-form-field>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Nivel</mat-label>
-        <mat-icon matPrefix>signal_cellular_alt</mat-icon>
-        <mat-select formControlName="nivel">
-          <mat-option value="basico">Básico</mat-option>
-          <mat-option value="intermedio">Intermedio</mat-option>
-          <mat-option value="avanzado">Avanzado</mat-option>
-        </mat-select>
-        @if (nivel?.hasError('required') && nivel?.touched) {
-          <mat-error>Seleccione un nivel</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Duración (horas)</mat-label>
-        <mat-icon matPrefix>schedule</mat-icon>
-        <input matInput type="number" min="1" formControlName="duracion" placeholder="Ej: 20" />
-        @if (duracion?.hasError('required') && duracion?.touched) {
-          <mat-error>La duración es obligatoria</mat-error>
-        }
-        @if (duracion?.hasError('min') && duracion?.touched) {
-          <mat-error>Debe ser mayor a 0</mat-error>
-        }
-      </mat-form-field>
+    <div class="card-header">
+      <div class="header-icon">
+        <mat-icon>menu_book</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2>Crear Nuevo Curso</h2>
+        <p>Completa la información para publicar un nuevo curso</p>
+      </div>
     </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Docente</mat-label>
-      <mat-icon matPrefix>person</mat-icon>
-      
-      <mat-select formControlName="docente">
-        @for (docente of docentes; track docente.id) {
-          <mat-option [value]="docente.id">
-            {{ docente.nombres }} {{ docente.apellidos }}
-          </mat-option>
-        }
-      </mat-select>
+    <div class="card-body">
+      <form [formGroup]="cursoForm">
 
-      @if (docente?.hasError('required') && docente?.touched) {
-        <mat-error>Seleccione un docente</mat-error>
-      }
-    </mat-form-field>
+        <div class="section-label">
+          <mat-icon>info</mat-icon>
+          <span>Información General</span>
+        </div>
 
-    <div class="form-actions">
-      <button class="btn-guardar" (click)="guardarCurso()">
-        <mat-icon>save</mat-icon> Guardar Curso
-      </button>
-      <button class="btn-cancelar" type="button">
-        <mat-icon>close</mat-icon> Cancelar
-      </button>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título del curso</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput formControlName="titulo" placeholder="Ej: Angular desde Cero" />
+          @if (titulo?.hasError('required') && titulo?.touched) {
+            <mat-error>El título es obligatorio</mat-error>
+          }
+          @if (titulo?.hasError('minlength') && titulo?.touched) {
+            <mat-error>Mínimo 5 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput rows="4" formControlName="descripcion" placeholder="Describe el contenido del curso..."></textarea>
+          @if (descripcion?.hasError('required') && descripcion?.touched) {
+            <mat-error>La descripción es obligatoria</mat-error>
+          }
+          @if (descripcion?.hasError('minlength') && descripcion?.touched) {
+            <mat-error>Mínimo 10 caracteres</mat-error>
+          }
+          @if (descripcion?.hasError('maxlength') && descripcion?.touched) {
+            <mat-error>Máximo 300 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="section-label">
+          <mat-icon>tune</mat-icon>
+          <span>Detalles del Curso</span>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nivel</mat-label>
+            <mat-icon matPrefix>signal_cellular_alt</mat-icon>
+            <mat-select formControlName="nivel">
+              <mat-option value="basico">🟢 Básico</mat-option>
+              <mat-option value="intermedio">🟡 Intermedio</mat-option>
+              <mat-option value="avanzado">🔴 Avanzado</mat-option>
+            </mat-select>
+            @if (nivel?.hasError('required') && nivel?.touched) {
+              <mat-error>Seleccione un nivel</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Duración (horas)</mat-label>
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput type="number" min="1" formControlName="duracion" placeholder="Ej: 20" />
+            <mat-hint>Horas totales del curso</mat-hint>
+            @if (duracion?.hasError('required') && duracion?.touched) {
+              <mat-error>La duración es obligatoria</mat-error>
+            }
+            @if (duracion?.hasError('min') && duracion?.touched) {
+              <mat-error>Debe ser mayor a 0</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Docente</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-select formControlName="docente">
+            @for (docente of docentes; track docente.id) {
+              <mat-option [value]="docente.id">
+                {{ docente.nombres }} {{ docente.apellidos }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (docente?.hasError('required') && docente?.touched) {
+            <mat-error>Seleccione un docente</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button class="btn-cancelar" type="button">
+            <mat-icon>close</mat-icon> Cancelar
+          </button>
+          <button class="btn-guardar" (click)="guardarCurso()">
+            <mat-icon>rocket_launch</mat-icon> Publicar Curso
+          </button>
+        </div>
+
+      </form>
     </div>
-  </form>
+
+  </div>
 </div>
