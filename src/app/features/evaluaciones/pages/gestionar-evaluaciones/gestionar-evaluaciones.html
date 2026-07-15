@@ -1,0 +1,49 @@
+<div class="page-header">
+  <div>
+    <h2>Gestionar Evaluaciones</h2>
+    <p>Administra las evaluaciones del curso</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn-volver" (click)="router.navigate(['/dashboard/gestionar-contenidos'], {queryParams: {cursoId: cursoId}})">
+      <mat-icon>arrow_back</mat-icon> Volver
+    </button>
+    <a class="btn-nuevo" [routerLink]="['/dashboard/crear-evaluacion']" [queryParams]="{cursoId: cursoId}">
+      <mat-icon>add_circle</mat-icon> Nueva Evaluación
+    </a>
+  </div>
+</div>
+
+@if (cargando) {
+  <div style="text-align:center;padding:2rem"><mat-spinner diameter="40"></mat-spinner></div>
+} @else {
+  <div class="evaluaciones-grid">
+    @for (ev of evaluaciones; track ev.id) {
+      <mat-card class="eval-card">
+        <mat-card-content>
+          <div class="eval-header">
+            <span class="tipo-badge" [style.background]="getTipoColor(ev.tipo) + '20'" [style.color]="getTipoColor(ev.tipo)">{{ ev.tipo }}</span>
+            <div class="eval-actions">
+              <a mat-icon-button [routerLink]="['/dashboard/crear-evaluacion']" [queryParams]="{id: ev.id, cursoId: cursoId}" title="Editar">
+                <mat-icon>edit</mat-icon>
+              </a>
+              <a mat-icon-button [routerLink]="['/dashboard/gestionar-preguntas']" [queryParams]="{evaluacionId: ev.id}" title="Preguntas">
+                <mat-icon>quiz</mat-icon>
+              </a>
+              <button mat-icon-button (click)="eliminar(ev.id)" title="Eliminar">
+                <mat-icon style="color:#F44336">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <h4>{{ ev.titulo }}</h4>
+          <p class="eval-desc">{{ ev.descripcion }}</p>
+          <div class="eval-meta">
+            <span><mat-icon>grade</mat-icon> Mín: {{ ev.puntajeMinimo ?? ev.puntaje_minimo ?? '—' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+    @empty {
+      <p style="color:#888;padding:1rem">No hay evaluaciones para este curso aún.</p>
+    }
+  </div>
+}

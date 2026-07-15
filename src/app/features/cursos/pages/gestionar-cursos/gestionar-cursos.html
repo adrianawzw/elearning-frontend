@@ -39,39 +39,33 @@
   </div>
 </div>
 
-<!-- Grid -->
-<div class="cursos-grid">
-  @for (curso of cursos; track curso.id) {
-    <div class="curso-card">
-      <div class="curso-img-wrap">
-        <img [src]="curso.img" [alt]="curso.titulo" class="curso-img" />
-        <span class="nivel-badge" [style.background]="getNivelColor(curso.nivel)">{{ curso.nivel }}</span>
-        <span class="estado-badge" [class.publicado]="curso.estado === 'publicado'" [class.borrador]="curso.estado === 'borrador'">
-          {{ curso.estado === 'publicado' ? 'Publicado' : 'Borrador' }}
-        </span>
-      </div>
-      <div class="curso-body">
-        <span class="categoria-tag">{{ curso.categoria }}</span>
-        <h4>{{ curso.titulo }}</h4>
-        <div class="curso-meta">
-          <span><mat-icon>people</mat-icon> {{ curso.estudiantes }} estudiantes</span>
-          <span><mat-icon>star</mat-icon> {{ curso.rating }}</span>
+@if (cargando) {
+  <div style="text-align:center;padding:2rem"><mat-spinner diameter="40"></mat-spinner></div>
+} @else {
+  <div class="cursos-grid">
+    @for (curso of cursos; track curso.id) {
+      <div class="curso-card">
+        <div class="curso-img-wrap">
+          <img [src]="curso.imagen_url ?? 'https://ui-avatars.com/api/?name=' + curso.titulo + '&size=400&background=49BBBD&color=fff'" [alt]="curso.titulo" class="curso-img" />
+          <span class="nivel-badge" [style.background]="getNivelColor(curso.nivel ?? '')">{{ curso.nivel }}</span>
         </div>
-        <div class="progreso-wrap">
-          <div class="progreso-header">
-            <span>Contenido completado</span>
-            <span class="progreso-val">{{ curso.progreso }}%</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" [style.width.%]="curso.progreso"></div>
+        <div class="curso-body">
+          <span class="categoria-tag">{{ curso.categoria ?? 'General' }}</span>
+          <h4>{{ curso.titulo }}</h4>
+          <p class="curso-desc">{{ curso.descripcion }}</p>
+          <div class="curso-meta">
+            <span><mat-icon>schedule</mat-icon> {{ curso.duracion ?? '—' }}</span>
           </div>
         </div>
+        <div class="curso-actions">
+          <a class="btn-editar" [routerLink]="['/dashboard/crear-curso']" [queryParams]="{id: curso.id}"><mat-icon>edit</mat-icon> Editar</a>
+          <a class="btn-contenido" [routerLink]="['/dashboard/gestionar-contenidos']" [queryParams]="{cursoId: curso.id}"><mat-icon>folder</mat-icon> Contenido</a>
+          <button class="btn-eliminar" (click)="eliminar(curso.id)"><mat-icon>delete</mat-icon></button>
+        </div>
       </div>
-      <div class="curso-actions">
-        <button class="btn-editar"><mat-icon>edit</mat-icon> Editar</button>
-        <button class="btn-contenido"><mat-icon>folder</mat-icon> Contenido</button>
-        <button class="btn-eliminar"><mat-icon>delete</mat-icon></button>
-      </div>
-    </div>
-  }
-</div>
+    }
+    @empty {
+      <p style="color:#888;padding:1rem">No tienes cursos creados aún.</p>
+    }
+  </div>
+}

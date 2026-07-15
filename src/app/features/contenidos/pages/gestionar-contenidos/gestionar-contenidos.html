@@ -62,12 +62,12 @@
       </div>
       <h4>{{ c.titulo }}</h4>
       <div class="contenido-meta">
-        <span><mat-icon>menu_book</mat-icon> {{ c.curso }}</span>
-        <span><mat-icon>calendar_today</mat-icon> {{ c.fecha }}</span>
+        <span><mat-icon>menu_book</mat-icon> {{ c.cursoTitulo ?? '—' }}</span>
+        <span><mat-icon>link</mat-icon> <a [href]="c.url_material" target="_blank">Ver material</a></span>
       </div>
       <div class="contenido-actions">
-        <button class="btn-editar"><mat-icon>edit</mat-icon> Editar</button>
-        <button class="btn-eliminar"><mat-icon>delete</mat-icon></button>
+        <button type="button" class="btn-editar" (click)="editarContenido(c.id)"><mat-icon>edit</mat-icon> Editar</button>
+        <button class="btn-eliminar" (click)="eliminar(c.id)"><mat-icon>delete</mat-icon></button>
       </div>
     </div>
   }

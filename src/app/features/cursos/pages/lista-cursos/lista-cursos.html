@@ -36,26 +36,36 @@
 
       <!-- Grid de cursos -->
       <div class="cursos-grid">
+        @if (cargando) {
+          <div style="grid-column:1/-1;text-align:center;padding:2rem"><mat-spinner diameter="40"></mat-spinner></div>
+        }
         @for (curso of cursosFiltrados; track curso.id) {
           <div class="curso-card card">
             <div class="curso-banner">
-              <img [src]="curso.img" [alt]="curso.titulo" class="curso-banner-img" />
-              <span class="nivel-badge" [class]="getNivelClass(curso.nivel)">{{ curso.nivel }}</span>
+              <img [src]="getAvatar(curso)" [alt]="curso.titulo" class="curso-banner-img" />
+              @if (curso.nivel) {
+                <span class="nivel-badge" [class]="getNivelClass(curso.nivel)">{{ curso.nivel }}</span>
+              }
             </div>
             <div class="curso-body">
-              <span class="curso-categoria">{{ curso.categoria }}</span>
+              @if (curso.categoria) {
+                <span class="curso-categoria">{{ curso.categoria }}</span>
+              }
               <h4>{{ curso.titulo }}</h4>
               <p>{{ curso.descripcion }}</p>
               <div class="curso-meta">
-                <span><mat-icon>person</mat-icon> {{ curso.docente }}</span>
-                <span><mat-icon>group</mat-icon> {{ curso.estudiantes }}</span>
-                <span><mat-icon>schedule</mat-icon> {{ curso.duracion }}</span>
+                @if (curso.duracion) {
+                  <span><mat-icon>schedule</mat-icon> {{ curso.duracion }}</span>
+                }
               </div>
             </div>
-            <div class="curso-footer">
-              <a [routerLink]="['/cursos', curso.id]" class="btn btn-primary">Ver Curso</a>
-            </div>
+
           </div>
+        }
+        @empty {
+          @if (!cargando) {
+            <p style="color:#888;grid-column:1/-1">No hay cursos disponibles.</p>
+          }
         }
       </div>
     </div>

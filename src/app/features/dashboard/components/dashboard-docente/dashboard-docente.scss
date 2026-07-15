@@ -26,7 +26,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -211,6 +211,57 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
+  }
+}
+
+.course-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  &--trophy {
+    background: rgba(244, 140, 6, 0.12);
+    color: #f48c06;
+    &:hover { background: rgba(244, 140, 6, 0.25); }
+  }
+
+  &--manage {
+    background: rgba(73, 187, 189, 0.12);
+    color: #49BBBD;
+    &:hover { background: rgba(73, 187, 189, 0.25); }
+  }
+
+  &--delete {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    &:hover { background: rgba(220, 53, 69, 0.2); }
+  }
+
+  &--create {
+    background: #49BBBD;
+    color: white;
+    &:hover { background: #3aa8aa; }
   }
 }
 

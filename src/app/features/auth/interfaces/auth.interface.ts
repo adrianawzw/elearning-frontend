@@ -27,4 +27,8 @@ export interface UserSession {
   token: string;
   email: string;
   rol?: string;
+  id?: number;
+  nombres?: string;
+  apellidos?: string;
+  foto_url?: string;
 }

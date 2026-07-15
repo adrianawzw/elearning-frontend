@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap, catchError, throwError, switchMap } from 'rxjs';
 import {
   LoginRequest,
   LoginResponse,
@@ -17,43 +17,44 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly API_URL = 'http://localhost:8080/api/v1/auth';
+  private readonly BASE_URL = 'http://localhost:8080/api/v1';
   private readonly TOKEN_KEY = 'access_token';
   private readonly USER_KEY = 'user_session';
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
+  private userSessionSubject = new BehaviorSubject<UserSession | null>(this.getUserSession());
+  public userSession$ = this.userSessionSubject.asObservable();
+
   login(credentials: LoginRequest): Observable<LoginResponse> {
-  return this.http.post<LoginResponse>(`${this.API_URL}/authenticate`, credentials).pipe(
-    tap((response) => {
-      this.saveToken(response.access_token);
-
-      let rol = null;
-      try {
-        const payload = JSON.parse(atob(response.access_token.split('.')[1]));
-        rol = payload.rol || payload.role || null;
-      } catch {}
-
-      const userSession: UserSession = {
-        token: response.access_token,
-        email: credentials.email,
-        rol: rol,
-      };
-      this.saveUserSession(userSession);
-      this.isAuthenticatedSubject.next(true);
-
-      // Redirigir según rol
-      if (rol === 'DOCENTE') {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/dashboard/inicio']);
-      }
-    }),
-    catchError((error) => {
-      return throwError(() => this.handleError(error));
-    }),
-  );
-}
+    return this.http.post<LoginResponse>(`${this.API_URL}/authenticate`, credentials).pipe(
+      tap((response) => this.saveToken(response.access_token)),
+      switchMap((response) =>
+        this.http.get<any>(`${this.BASE_URL}/usuarios/me`).pipe(
+          tap((usuario) => {
+            const userSession: UserSession = {
+              token: response.access_token,
+              email: usuario.email,
+              rol: usuario.rol,
+              id: usuario.id,
+              nombres: usuario.nombres,
+              apellidos: usuario.apellidos,
+            };
+            this.saveUserSession(userSession);
+            this.isAuthenticatedSubject.next(true);
+            if (usuario.rol === 'DOCENTE') {
+              this.router.navigate(['/dashboard']);
+            } else {
+              this.router.navigate(['/dashboard/inicio']);
+            }
+          }),
+          catchError(() => throwError(() => new Error('Error al obtener datos del usuario')))
+        )
+      ),
+      catchError((error) => throwError(() => this.handleError(error)))
+    );
+  }
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.API_URL}/register`, data).pipe(
@@ -98,6 +99,10 @@ export class AuthService {
     }
   }
 
+  getUserId(): number | null {
+    return this.getUserSession()?.id ?? null;
+  }
+
   isDocente(): boolean {
     return this.getUserRol() === 'DOCENTE';
   }
@@ -110,8 +115,17 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  updateCurrentUser(partial: Partial<UserSession>): void {
+    const current = this.getUserSession();
+    if (!current) return;
+    const updated = { ...current, ...partial };
+    localStorage.setItem(this.USER_KEY, JSON.stringify(updated));
+    this.userSessionSubject.next(updated);
+  }
+
   private saveUserSession(session: UserSession): void {
     localStorage.setItem(this.USER_KEY, JSON.stringify(session));
+    this.userSessionSubject.next(session);
   }
 
   private hasToken(): boolean {

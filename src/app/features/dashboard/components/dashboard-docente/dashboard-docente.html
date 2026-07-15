@@ -3,113 +3,78 @@
   <!-- HEADER -->
   <div class="dashboard-header">
     <h2>Dashboard Docente</h2>
-    <p>Bienvenido, Prof. Carlos 🎉</p>
+    <p>Bienvenido, {{ userName }} 🎓</p>
   </div>
 
   <div class="stats-grid">
-    <mat-card class="stat-card">
-      <div class="stat-icon">
-        <mat-icon>school</mat-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">4</span>
-        <span class="stat-label">Cursos dictados</span>
-      </div>
-    </mat-card>
-    <mat-card class="stat-card">
-      <div class="stat-icon">
-        <mat-icon>people</mat-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">156</span>
-        <span class="stat-label">Estudiantes totales</span>
-      </div>
-    </mat-card>
-    <mat-card class="stat-card">
-      <div class="stat-icon">
-        <mat-icon>star</mat-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">4.8</span>
-        <span class="stat-label">Calificación promedio</span>
-      </div>
-    </mat-card>
-    <mat-card class="stat-card">
-      <div class="stat-icon">
-        <mat-icon>assignment</mat-icon>
-      </div>
-      <div class="stat-content">
-        <span class="stat-value">8</span>
-        <span class="stat-label">Evaluaciones pendientes</span>
-      </div>
-    </mat-card>
+    @for (stat of stats; track stat.label) {
+      <mat-card class="stat-card">
+        <div class="stat-icon"><mat-icon>{{ stat.icon }}</mat-icon></div>
+        <div class="stat-content">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </mat-card>
+    }
   </div>
 
   <mat-card class="courses-card">
     <mat-card-header>
-      <mat-card-title>
-        <mat-icon>book</mat-icon> Mis Cursos
-      </mat-card-title>
-      <button mat-raised-button color="primary" class="add-course-btn">
+      <mat-card-title><mat-icon>book</mat-icon> Mis Cursos</mat-card-title>
+      <a class="action-btn action-btn--create" routerLink="/dashboard/crear-curso">
         <mat-icon>add</mat-icon> Crear Curso
-      </button>
+      </a>
     </mat-card-header>
     <mat-card-content>
-      @for (course of myCourses; track course.title) {
+      @for (curso of cursos; track curso.id) {
         <div class="course-item">
           <div class="course-info">
             <div class="course-image">
-              <img [src]="course.image" [alt]="course.title" class="course-img">
+              <img [src]="curso.imagen_url ?? 'https://ui-avatars.com/api/?name=' + curso.titulo + '&size=120&background=49BBBD&color=fff'" [alt]="curso.titulo" class="course-img">
             </div>
             <div class="course-details">
-              <h4>{{ course.title }}</h4>
+              <h4>{{ curso.titulo }}</h4>
+              <p>{{ curso.categoria ?? 'General' }} • {{ curso.nivel }}</p>
               <div class="course-meta">
-                <span class="course-students">
-                  <mat-icon>people</mat-icon> {{ course.students }} estudiantes
-                </span>
-                <span class="course-rating">
-                  <mat-icon>star</mat-icon> {{ course.rating }}
-                </span>
-              </div>
-              <div class="course-progress-wrapper">
-                <span class="progress-label">Progreso del curso</span>
-                <mat-progress-bar
-                  mode="determinate"
-                  [value]="course.progress"
-                  class="course-progress"
-                ></mat-progress-bar>
-                <span class="progress-value">{{ course.progress }}%</span>
+                <span class="course-students"><mat-icon>schedule</mat-icon> {{ curso.duracion ?? '—' }}</span>
               </div>
             </div>
           </div>
-          <button mat-stroked-button color="primary" class="manage-btn">
-            <mat-icon>manage</mat-icon> Gestionar
-          </button>
+          <div class="course-actions">
+            <button class="action-btn action-btn--trophy" (click)="toggleFinalizados(curso.id!)" title="Ver finalizados">
+              <mat-icon>emoji_events</mat-icon>
+            </button>
+            <a class="action-btn action-btn--manage" routerLink="/dashboard/gestionar-cursos">
+              <mat-icon>settings</mat-icon>
+              <span>Gestionar</span>
+            </a>
+            <button class="action-btn action-btn--delete" (click)="eliminarCurso(curso.id!)" title="Eliminar curso">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
+        @if (cursoExpandido === curso.id) {
+          <div class="finalizados-panel">
+            @if ((finalizadosPorCurso[curso.id!] ?? []).length === 0) {
+              <p class="sin-finalizados">Ningún estudiante ha completado este curso aún.</p>
+            } @else {
+              @for (f of finalizadosPorCurso[curso.id!]; track f.estudiante_nombre) {
+                <div class="finalizado-item">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>{{ f.estudiante_nombre }}</span>
+                  @if (f.nota_final != null) {
+                    <span class="nota">Nota: {{ f.nota_final }}</span>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      }
+      @empty {
+        <p style="color:#888;padding:1rem">No tienes cursos creados aún. ¡Crea tu primer curso!</p>
       }
     </mat-card-content>
   </mat-card>
 
-  <!-- ACTIVIDADES RECIENTES -->
-  <mat-card class="activities-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>history</mat-icon> Actividades Recientes
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      @for (activity of recentActivities; track activity.time) {
-        <div class="activity-item">
-          <div class="activity-icon">
-            <mat-icon>{{ activity.icon }}</mat-icon>
-          </div>
-          <div class="activity-content">
-            <p class="activity-action">{{ activity.action }}</p>
-            <p class="activity-course">{{ activity.course }}</p>
-            <span class="activity-time">{{ activity.time }}</span>
-          </div>
-        </div>
-      }
-    </mat-card-content>
-  </mat-card>
 </div>

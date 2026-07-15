@@ -1,11 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterLink } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthService } from '../../../auth/services/auth.service';
+import { InscripcionService } from '../../../inscripciones/services/inscripcion';
+import { ProgresoService } from '../../../progreso/services/progreso.service';
+import { ResultadoEvaluacionService } from '../../../evaluaciones/services/resultado-evaluacion.service';
 
 @Component({
   selector: 'app-dashboard-estudiante',
@@ -13,42 +19,65 @@ import { RouterLink } from '@angular/router';
   templateUrl: './dashboard-estudiante.html',
   styleUrl: './dashboard-estudiante.scss',
 })
-export class DashboardEstudiante {
+export class DashboardEstudiante implements OnInit {
+  private authService = inject(AuthService);
   today = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  userName = 'Estudiante';
+
+  private inscripcionService = inject(InscripcionService);
+  private progresoService = inject(ProgresoService);
+  private resultadoService = inject(ResultadoEvaluacionService);
 
   stats = [
-    { icon: 'menu_book', value: '8', label: 'Cursos Activos', color: '#49BBBD', bg: '#49BBBD18' },
-    { icon: 'check_circle', value: '12', label: 'Cursos Completados', color: '#4CAF50', bg: '#4CAF5018' },
-    { icon: 'trending_up', value: '65%', label: 'Progreso General', color: '#F48C06', bg: '#F48C0618' },
-    { icon: 'workspace_premium', value: '4', label: 'Certificados', color: '#9C27B0', bg: '#9C27B018' },
+    { icon: 'menu_book', value: '0', label: 'Cursos Activos', color: '#49BBBD', bg: '#49BBBD18' },
+    { icon: 'check_circle', value: '0', label: 'Cursos Completados', color: '#4CAF50', bg: '#4CAF5018' },
+    { icon: 'play_circle', value: '0', label: 'Videos Vistos', color: '#F48C06', bg: '#F48C0618' },
+    { icon: 'assignment_turned_in', value: '0', label: 'Actividades Realizadas', color: '#9C27B0', bg: '#9C27B018' },
   ];
 
-  videoViews = [
-    { day: '1 Ene', views: 65 },
-    { day: '2 Ene', views: 45 },
-    { day: '3 Ene', views: 80 },
-    { day: '4 Ene', views: 55 },
-    { day: '5 Ene', views: 70 },
-    { day: '6 Ene', views: 40 },
-    { day: '7 Ene', views: 85 },
-    { day: '8 Ene', views: 60 },
-    { day: '9 Ene', views: 75 },
-    { day: '10 Ene', views: 50 },
-    { day: '11 Ene', views: 90 },
-    { day: '12 Ene', views: 65 },
-  ];
+  activeCourses: { id: number; titulo: string; descripcion: string; progreso: number; categoria: string; imagen: string }[] = [];
 
-  activeCourses = [
-    { id: 1, title: 'Desarrollo Web Avanzado', description: 'Práctica y teoría sobre desarrollo web avanzado.', progress: 75, category: 'Programación', image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=120&h=80&fit=crop' },
-    { id: 2, title: 'Power BI para Principiantes', description: 'Análisis de datos y visualización con Power BI.', progress: 40, category: 'Certificación', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=80&fit=crop' },
-    { id: 3, title: 'Data Science Básico', description: 'Fundamentos de data science con Python.', progress: 90, category: 'Datos', image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=120&h=80&fit=crop' },
-    { id: 4, title: 'UI/UX Design', description: 'Diseño de interfaces y experiencia de usuario.', progress: 25, category: 'Diseño', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=120&h=80&fit=crop' },
-  ];
+  categorias: { label: string; count: number; color: string }[] = [];
 
-  categorias = [
-    { label: 'Avanzado', count: 12, color: '#49BBBD' },
-    { label: 'Certificado', count: 8, color: '#9C27B0' },
-    { label: 'Principiante', count: 15, color: '#F48C06' },
-    { label: 'Profesional', count: 6, color: '#4CAF50' },
-  ];
+  private readonly CATEGORIA_COLORS: Record<string, string> = {
+    'Programación': '#49BBBD', 'Diseño': '#9C27B0', 'Datos': '#F48C06',
+    'Idiomas': '#4CAF50', 'Negocios': '#F44336'
+  };
+
+  ngOnInit() {
+    const session = this.authService.getUserSession();
+    this.userName = session?.nombres ?? session?.email?.split('@')[0] ?? 'Estudiante';
+    if (session?.id) this.cargarStats(session.id);
+  }
+
+  cargarStats(estudianteId: number) {
+    forkJoin([
+      this.inscripcionService.obtenerPorEstudiante(estudianteId).pipe(catchError(() => of([]))),
+      this.progresoService.obtenerPorEstudiante(estudianteId).pipe(catchError(() => of([]))),
+      this.resultadoService.obtenerPorEstudiante(estudianteId).pipe(catchError(() => of([])))
+    ]).subscribe(([inscripciones, progresos, resultados]) => {
+      this.stats[0].value = String(inscripciones.filter((i: any) => i.estado === 'ACTIVO').length);
+      this.stats[1].value = String(inscripciones.filter((i: any) => i.estado === 'FINALIZADO').length);
+      this.stats[2].value = String(progresos.length);
+      this.stats[3].value = String(resultados.length);
+
+      this.activeCourses = inscripciones
+        .filter((i: any) => i.estado === 'ACTIVO')
+        .map((i: any) => ({
+          id: i.curso_id,
+          titulo: i.curso_titulo ?? 'Curso',
+          descripcion: i.curso_descripcion ?? '',
+          progreso: i.progreso ?? 0,
+          categoria: i.curso_categoria ?? 'General',
+          imagen: i.curso_imagen ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(i.curso_titulo ?? 'Curso')}&size=120&background=49BBBD&color=fff`
+        }));
+
+      const cats = [...new Set(inscripciones.map((i: any) => i.curso_categoria).filter(Boolean))];
+      this.categorias = (cats as string[]).map(cat => ({
+        label: cat,
+        count: inscripciones.filter((i: any) => i.curso_categoria === cat).length,
+        color: this.CATEGORIA_COLORS[cat] ?? '#49BBBD'
+      }));
+    });
+  }
 }

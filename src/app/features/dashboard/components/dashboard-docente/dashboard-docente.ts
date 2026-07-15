@@ -1,85 +1,89 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterLink } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { CursoService } from '../../../cursos/services/curso.service';
+import { InscripcionService } from '../../../inscripciones/services/inscripcion';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Curso } from '../../../../shared/interfaces/models.interface';
 
 @Component({
   selector: 'app-dashboard-docente',
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatButtonModule,
-    MatChipsModule,
-  ],
+  imports: [CommonModule, DatePipe, MatCardModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatChipsModule, RouterLink, MatSnackBarModule],
   templateUrl: './dashboard-docente.html',
   styleUrl: './dashboard-docente.scss',
 })
-export class DashboardDocente {
+export class DashboardDocente implements OnInit {
+  private cursoService = inject(CursoService);
+  private inscripcionService = inject(InscripcionService);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
+  private docenteId: number | null = null;
+
+  userName = 'Docente';
+  cursos: Curso[] = [];
+  finalizadosPorCurso: Record<number, any[]> = {};
+  cursoExpandido: number | null = null;
+
   stats = [
-    { icon: '👨‍🏫', value: '4', label: 'Cursos dictados' },
-    { icon: '👨‍🎓', value: '156', label: 'Estudiantes totales' },
-    { icon: '⭐', value: '4.8', label: 'Calificación promedio' },
-    { icon: '📝', value: '8', label: 'Evaluaciones pendientes' },
+    { icon: 'school', value: '0', label: 'Cursos dictados' },
+    { icon: 'people', value: '0', label: 'Estudiantes totales' },
+    { icon: 'assignment', value: '0', label: 'Contenidos totales' },
   ];
 
-  myCourses = [
-    {
-      title: 'Curso de Programación Web',
-      students: 42,
-      progress: 75,
-      rating: 4.9,
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoYz5pp_WctPH0ujKjx84ONUCQEip0BcfZpwUIbKFSV3wqeYUJJ_x8vFM&s=10',
-    },
-    {
-      title: 'Power BI para Principiantes',
-      students: 38,
-      progress: 40,
-      rating: 4.7,
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoYz5pp_WctPH0ujKjx84ONUCQEip0BcfZpwUIbKFSV3wqeYUJJ_x8vFM&s=10',
-    },
-    {
-      title: 'Data Science Básico',
-      students: 56,
-      progress: 90,
-      rating: 4.9,
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoYz5pp_WctPH0ujKjx84ONUCQEip0BcfZpwUIbKFSV3wqeYUJJ_x8vFM&s=10',
-    },
-    {
-      title: 'UI/UX Design',
-      students: 20,
-      progress: 25,
-      rating: 4.5,
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoYz5pp_WctPH0ujKjx84ONUCQEip0BcfZpwUIbKFSV3wqeYUJJ_x8vFM&s=10',
-    },
-  ];
+  ngOnInit() {
+    const session = this.authService.getUserSession();
+    this.userName = session?.nombres ?? session?.email?.split('@')[0] ?? 'Docente';
+    this.docenteId = session?.id ?? null;
+    if (session?.id) this.cargarStats(session.id);
+  }
 
-  recentActivities = [
-    {
-      action: 'Nuevo estudiante inscrito',
-      course: 'Data Science Básico',
-      time: 'Hace 2 horas',
-      icon: 'person_add',
-    },
-    {
-      action: 'Evaluación calificada',
-      course: 'Power BI para Principiantes',
-      time: 'Hace 4 horas',
-      icon: 'grading',
-    },
-    {
-      action: 'Curso actualizado',
-      course: 'Curso de Programación Web',
-      time: 'Hace 1 día',
-      icon: 'update',
-    },
-  ];
+  cargarStats(docenteId: number) {
+    this.cursoService.obtenerPorDocente(docenteId).subscribe({
+      next: (cursos) => {
+        this.cursos = cursos;
+        this.stats[0].value = String(cursos.length);
+
+        const totalContenidos = cursos.reduce((sum, c) => sum + (c.contenido?.length ?? 0), 0);
+        this.stats[2].value = String(totalContenidos);
+
+        const estudiantesIds = new Set(cursos.flatMap(c => c.inscripciones ?? []));
+        this.stats[1].value = String(estudiantesIds.size);
+
+        if (cursos.length) {
+          const requests = cursos.map(c =>
+            this.inscripcionService.obtenerFinalizadosPorCurso(c.id!).pipe(catchError(() => of([])))
+          );
+          forkJoin(requests).subscribe(resultados => {
+            cursos.forEach((c, i) => { this.finalizadosPorCurso[c.id!] = resultados[i]; });
+          });
+        }
+      }
+    });
+  }
+
+  toggleFinalizados(cursoId: number) {
+    this.cursoExpandido = this.cursoExpandido === cursoId ? null : cursoId;
+  }
+
+  eliminarCurso(id: number) {
+    if (!confirm('¿Eliminar este curso? Esta acción no se puede deshacer.')) return;
+    this.cursoService.eliminar(id).subscribe({
+      next: () => {
+        this.cursos = this.cursos.filter(c => c.id !== id);
+        this.stats[0].value = String(this.cursos.length);
+        this.snackBar.open('Curso eliminado', 'Cerrar', { duration: 3000, horizontalPosition: 'end', verticalPosition: 'top' });
+      },
+      error: () => this.snackBar.open('Error al eliminar el curso', 'Cerrar', { duration: 3000 })
+    });
+  }
+
+  recentActivities: { estudiante_nombre: string; curso_titulo: string; fecha_inscripcion: string }[] = [];
 }

@@ -1,0 +1,103 @@
+<div class="page-header">
+  <div>
+    <h2>Gestionar Preguntas</h2>
+    <p>Agrega y administra las preguntas de la evaluación</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn-volver" (click)="router.navigate(['/dashboard/gestionar-evaluaciones'], {queryParams: {cursoId: route.snapshot.queryParamMap.get('cursoId')}})">
+      <mat-icon>arrow_back</mat-icon> Volver
+    </button>
+    <button class="btn-nuevo" (click)="mostrarForm = !mostrarForm">
+      <mat-icon>{{ mostrarForm ? 'close' : 'add_circle' }}</mat-icon>
+      {{ mostrarForm ? 'Cancelar' : 'Nueva Pregunta' }}
+    </button>
+  </div>
+</div>
+
+@if (mostrarForm) {
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="preguntaForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Enunciado</mat-label>
+          <textarea matInput rows="2" formControlName="enunciado" placeholder="¿Cuál es la pregunta?"></textarea>
+          @if (preguntaForm.get('enunciado')?.hasError('required') && preguntaForm.get('enunciado')?.touched) {
+            <mat-error>El enunciado es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="opciones-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Opción A</mat-label>
+            <input matInput formControlName="opcion_a" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Opción B</mat-label>
+            <input matInput formControlName="opcion_b" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Opción C</mat-label>
+            <input matInput formControlName="opcion_c" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Opción D</mat-label>
+            <input matInput formControlName="opcion_d" />
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Respuesta correcta</mat-label>
+            <mat-select formControlName="respuesta_correcta">
+              @for (op of getOpciones(); track op) {
+                <mat-option [value]="op">{{ op }}</mat-option>
+              }
+            </mat-select>
+            @if (preguntaForm.get('respuesta_correcta')?.hasError('required') && preguntaForm.get('respuesta_correcta')?.touched) {
+              <mat-error>Selecciona la respuesta correcta</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Valor (puntos)</mat-label>
+            <input matInput type="number" formControlName="valor_punto" />
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-guardar" (click)="guardarPregunta()" [disabled]="guardando">
+            <mat-icon>save</mat-icon> {{ guardando ? 'Guardando...' : 'Agregar Pregunta' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
+
+@if (cargando) {
+  <div style="text-align:center;padding:2rem"><mat-spinner diameter="40"></mat-spinner></div>
+} @else {
+  <div class="preguntas-list">
+    @for (p of preguntas; track p.id; let i = $index) {
+      <mat-card class="pregunta-card">
+        <mat-card-content>
+          <div class="pregunta-header">
+            <span class="pregunta-num">Pregunta {{ i + 1 }}</span>
+            <div class="pregunta-actions">
+              <span class="valor-badge">{{ p.valorPunto ?? p.valor_punto }} pt</span>
+              <button mat-icon-button (click)="eliminar(p.id)"><mat-icon style="color:#F44336">delete</mat-icon></button>
+            </div>
+          </div>
+          <p class="enunciado">{{ p.enunciado }}</p>
+          <div class="opciones-list">
+            @for (op of parseOpciones(p.opciones); track op) {
+              <span class="opcion-item" [class.correcta]="op === p.respuestaCorrecta || op === p.respuesta_correcta">{{ op }}</span>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+    @empty {
+      <p style="color:#888;padding:1rem">No hay preguntas aún. ¡Agrega la primera!</p>
+    }
+  </div>
+}

@@ -42,6 +42,9 @@
             <a routerLink="/mis-cursos" class="btn btn-primary" (click)="closeMenu()">Mis Cursos</a>
           }
           <button class="btn btn-ghost" (click)="logout()">Cerrar Sesión</button>
+          @if (avatarUrl) {
+            <img [src]="avatarUrl" class="navbar-avatar" alt="avatar" />
+          }
         } @else if (!isAuthPage) {
           <a routerLink="/auth/login" class="btn btn-ghost" (click)="closeMenu()">Iniciar Sesión</a>
           <a routerLink="/auth/register" class="btn btn-primary" (click)="closeMenu()"

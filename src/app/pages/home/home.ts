@@ -1,19 +1,30 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/components/navbar/navbar';
 import { Footer } from '../../shared/components/footer/footer';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CursoService } from '../../features/cursos/services/curso.service';
+import { Curso } from '../../shared/interfaces/models.interface';
+import { catchError, of } from 'rxjs';
+import { AuthService } from '../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-home',
-  imports: [Navbar, Footer, MatButtonModule, MatIcon, MatCardModule, MatFormFieldModule, MatIconModule],
+  imports: [Navbar, Footer, RouterLink, MatButtonModule, MatIcon, MatCardModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home implements OnInit, OnDestroy {
+  private cursoService = inject(CursoService);
+  private authService = inject(AuthService);
+  router = inject(Router);
+
+  cursos: Curso[] = [];
+  cargandoCursos = true;
 
   slides = [
     { img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=700&h=600&fit=crop', alt: 'Estudiantes colaborando' },
@@ -27,6 +38,23 @@ export class Home implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.interval = setInterval(() => this.next(), 4000);
+    this.cursoService.cursos$.subscribe(data => {
+      this.cursos = data;
+      if (data.length > 0) this.cargandoCursos = false;
+    });
+    this.cursoService.obtenerPublicos().pipe(catchError(() => of([]))).subscribe(() => {
+      this.cargandoCursos = false;
+    });
+  }
+
+  verCurso(cursoId: number) {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/auth/login']);
+    } else if (this.authService.isDocente()) {
+      this.router.navigate(['/dashboard/gestionar-cursos']);
+    } else {
+      this.router.navigate(['/dashboard/ver-curso', cursoId]);
+    }
   }
 
   ngOnDestroy() {

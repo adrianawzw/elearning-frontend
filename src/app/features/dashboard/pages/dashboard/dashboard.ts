@@ -76,12 +76,20 @@ export class Dashboard implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    const session = this.authService.getUserSession();
     const rol = this.authService.getUserRol();
     this.userRole = rol === 'DOCENTE' ? 'docente' : 'estudiante';
-    this.userName = session?.email?.split('@')[0] ?? 'Usuario';
-    this.userEmail = session?.email ?? '';
-    this.userAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userName)}&size=40&background=49BBBD&color=fff&bold=true`;
+
+    this.authService.userSession$.subscribe(session => {
+      if (session) {
+        const nombre = `${session.nombres ?? ''} ${session.apellidos ?? ''}`.trim() || session.email?.split('@')[0] || 'Usuario';
+        this.userName = nombre;
+        this.userEmail = session.email ?? '';
+        this.userAvatar = session.foto_url
+          ? session.foto_url
+          : `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&size=40&background=49BBBD&color=fff&bold=true`;
+      }
+    });
+
     this.handsetSub = this.breakpointObserver.observe('(max-width: 768px)').subscribe((res) => {
       this.isHandset = res.matches;
       if (this.isHandset && this.drawer) {

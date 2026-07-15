@@ -76,6 +76,38 @@
 
 textarea { resize: none; }
 
+.imagen-upload {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+
+  .imagen-preview {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+  }
+
+  .file-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    background: #f5f5f5;
+    border: 1.5px dashed #49BBBD;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.875rem;
+    color: #49BBBD;
+    font-weight: 500;
+    transition: background 0.2s;
+    &:hover { background: #e8f7f7; }
+    mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; }
+  }
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

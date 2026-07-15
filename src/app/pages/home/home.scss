@@ -305,6 +305,39 @@
   background: var(--off-white);
 }
 
+.btn-inscribirse {
+  background: #49BBBD;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    background: #3aa8aa;
+  }
+}
+
+.btn-ver-todos {
+  background: transparent;
+  color: #49BBBD;
+  border: 2px solid #49BBBD;
+  padding: 0.65rem 2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    background: #49BBBD;
+    color: white;
+  }
+}
+
 .feature-card {
   text-align: center;
   padding: 2.5rem 2rem;

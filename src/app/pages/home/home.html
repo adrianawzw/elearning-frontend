@@ -104,6 +104,42 @@
     </div>
   </section>
 
+  <section class="section-padding cursos-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Catálogo</span>
+        <h2 class="section-title">Nuestros Cursos</h2>
+        <p class="section-subtitle">Explora nuestra oferta educativa actualizada en tiempo real.</p>
+      </div>
+      @if (cargandoCursos) {
+        <div style="text-align:center;padding:2rem"><mat-spinner diameter="40"></mat-spinner></div>
+      } @else {
+        <div class="grid-3">
+          @for (curso of cursos.slice(0, 6); track curso.id) {
+            <mat-card class="curso-card card">
+              <img [src]="curso.imagen_url ?? 'https://ui-avatars.com/api/?name=' + curso.titulo + '&size=400&background=49BBBD&color=fff'" [alt]="curso.titulo" class="curso-img" />
+              <mat-card-content>
+                <h4>{{ curso.titulo }}</h4>
+                <p class="curso-desc">{{ curso.descripcion }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button (click)="verCurso(curso.id)" class="btn-inscribirse">Ver curso</button>
+              </mat-card-actions>
+            </mat-card>
+          }
+          @empty {
+            <p style="color:#888">No hay cursos disponibles aún.</p>
+          }
+        </div>
+        @if (cursos.length > 6) {
+          <div style="text-align:center;margin-top:2rem">
+            <button class="btn-ver-todos" (click)="router.navigate(['/cursos'])">Ver todos los cursos</button>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
   <section class="section-padding testimonials-section">
     <div class="container">
       <div class="testimonials-grid grid-2">
