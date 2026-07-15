@@ -3,7 +3,7 @@
   <!-- Header -->
   <div class="dashboard-header">
     <div>
-      <h2>Bienvenida de vuelta, María 👋</h2>
+      <h2>Bienvenido de vuelta, {{ userName }} 👋</h2>
       <p>{{ today }} — Sigue aprendiendo, vas muy bien</p>
     </div>
     <a class="btn-explorar" routerLink="/dashboard/catalogo">
@@ -29,23 +29,23 @@
   <!-- Gráfica -->
   <mat-card class="chart-card">
     <mat-card-header>
-      <mat-card-title>Videos vistos (Día)</mat-card-title>
+      <mat-card-title>Mis Categorías de Estudio</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div class="chart-bars">
-        @for (item of videoViews; track item.day) {
-          <div class="chart-bar-container">
-            <div
-              class="chart-bar"
-              [style.height.%]="item.views"
-              [style.background]="item.views > 75 ? '#49BBBD' : '#E0F7F7'"
-            >
-              <span class="chart-value">{{ item.views }}%</span>
+      @if (categorias.length === 0) {
+        <p class="empty-msg">Aún no tienes cursos inscritos.</p>
+      } @else {
+        <div class="chart-bars">
+          @for (cat of categorias; track cat.label) {
+            <div class="chart-bar-container">
+              <div class="chart-bar" [style.height.%]="(cat.count / +stats[2].value) * 100 || 50" [style.background]="cat.color">
+                <span class="chart-value">{{ cat.count }}</span>
+              </div>
+              <span class="chart-label">{{ cat.label }}</span>
             </div>
-            <span class="chart-label">{{ item.day }}</span>
-          </div>
-        }
-      </div>
+          }
+        </div>
+      }
     </mat-card-content>
   </mat-card>
 
@@ -57,20 +57,20 @@
         <mat-card-title><mat-icon>menu_book</mat-icon> Actividades de Aprendizaje</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        @for (course of activeCourses; track course.title) {
+        @for (course of activeCourses; track course.titulo) {
           <div class="activity-item">
             <div class="activity-info">
               <div class="activity-image">
-                <img [src]="course.image" [alt]="course.title" class="activity-img" />
+                <img [src]="course.imagen" [alt]="course.titulo" class="activity-img" />
               </div>
               <div class="activity-details">
-                <h4>{{ course.title }}</h4>
-                <p>{{ course.description }}</p>
+                <h4>{{ course.titulo }}</h4>
+                <p>{{ course.descripcion }}</p>
                 <div class="activity-meta">
-                  <span class="category-chip">{{ course.category }}</span>
-                  <span class="progress-text">{{ course.progress }}%</span>
+                  <span class="category-chip">{{ course.categoria }}</span>
+                  <span class="progress-text">{{ course.progreso }}%</span>
                 </div>
-                <mat-progress-bar mode="determinate" [value]="course.progress" class="activity-progress"></mat-progress-bar>
+                <mat-progress-bar mode="determinate" [value]="course.progreso" class="activity-progress"></mat-progress-bar>
               </div>
             </div>
             <button mat-icon-button class="activity-btn" [routerLink]="['/dashboard/ver-curso', course.id]">
@@ -86,12 +86,16 @@
         <mat-card-title><mat-icon>category</mat-icon> Categorías</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        @for (cat of categorias; track cat.label) {
-          <div class="category-item">
-            <span class="category-dot" [style.background]="cat.color"></span>
-            <span>{{ cat.label }}</span>
-            <span class="category-count">{{ cat.count }} cursos</span>
-          </div>
+        @if (categorias.length === 0) {
+          <p class="empty-msg">Sin categorías aún.</p>
+        } @else {
+          @for (cat of categorias; track cat.label) {
+            <div class="category-item">
+              <span class="category-dot" [style.background]="cat.color"></span>
+              <span>{{ cat.label }}</span>
+              <span class="category-count">{{ cat.count }} cursos</span>
+            </div>
+          }
         }
       </mat-card-content>
     </mat-card>

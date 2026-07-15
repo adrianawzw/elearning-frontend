@@ -24,16 +24,15 @@ import { Catalogo } from './features/dashboard/pages/catalogo/catalogo';
 import { MisCursosEstudiante } from './features/dashboard/pages/mis-cursos-estudiante/mis-cursos-estudiante';
 import { PerfilEstudiante } from './features/dashboard/pages/perfil-estudiante/perfil-estudiante';
 import { VerCurso } from './features/dashboard/pages/ver-curso/ver-curso';
+import { GestionarEvaluaciones } from './features/evaluaciones/pages/gestionar-evaluaciones/gestionar-evaluaciones';
+import { EvaluacionForm } from './features/evaluaciones/components/evaluacion-form/evaluacion-form';
+import { GestionarPreguntas } from './features/evaluaciones/pages/gestionar-preguntas/gestionar-preguntas';
 
 export const routes: Routes = [
   { path: '', component: Home },
-
   { path: 'nosotros', component: Nosotros },
-
   { path: 'contacto', component: Contacto },
-
   { path: 'auth/login', component: Login },
-
   { path: 'auth/register', component: Register },
 
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard],
@@ -45,28 +44,23 @@ export const routes: Routes = [
       { path: 'mis-cursos', component: MisCursosEstudiante },
       { path: 'perfil', component: PerfilEstudiante },
       { path: 'ver-curso/:id', component: VerCurso },
-      { path: 'evaluacion', component: Evaluacion },
+      { path: 'evaluacion/:id', component: Evaluacion },
       // Docente
       { path: 'gestionar-cursos', component: GestionarCursos },
       { path: 'crear-curso', component: CursoForm },
       { path: 'gestionar-contenidos', component: GestionarContenidos },
       { path: 'crear-contenido', component: ContenidoForm },
-      { path: 'gestionar-evaluaciones', component: Resultados },
-      { path: 'crear-evaluacion', component: Evaluacion },
+      { path: 'gestionar-evaluaciones', component: GestionarEvaluaciones },
+      { path: 'crear-evaluacion', component: EvaluacionForm },
+      { path: 'gestionar-preguntas', component: GestionarPreguntas },
     ]
   },
 
   { path: 'cursos', component: ListaCursos },
-
   { path: 'cursos/:id', component: DetalleCurso },
-
   { path: 'mis-cursos', component: MisCursos },
-
   { path: 'perfil', component: Perfil },
-
   { path: 'evaluacion', component: Evaluacion },
-
   { path: 'resultados', component: Resultados },
-
   { path: '**', component: NotFound },
 ];

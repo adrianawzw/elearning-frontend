@@ -1,0 +1,13 @@
+.form-wrapper { max-width: 700px; margin: 0 auto; padding: 1rem; }
+.form-card { background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow: hidden; }
+.card-header { background: linear-gradient(135deg, #49BBBD, #2d9ea0); padding: 1.5rem; display: flex; align-items: center; gap: 1rem; color: white; }
+.header-icon mat-icon { font-size: 2rem; width: 2rem; height: 2rem; }
+.header-text h2 { margin: 0; font-size: 1.3rem; }
+.header-text p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+.card-body { padding: 1.5rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.full-width { width: 100%; margin-bottom: 0.5rem; }
+.form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; }
+.btn-guardar { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.5rem; background: #49BBBD; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; }
+.btn-guardar:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-cancelar { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.2rem; background: white; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; }

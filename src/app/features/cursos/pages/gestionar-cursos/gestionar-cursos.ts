@@ -1,33 +1,61 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
+import { CursoService } from '../../services/curso.service';
+import { AuthService } from '../../../../features/auth/services/auth.service';
+import { Curso } from '../../../../shared/interfaces/models.interface';
 
 @Component({
   selector: 'app-gestionar-cursos',
-  imports: [MatCardModule, MatIconModule, MatButtonModule, RouterLink],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatSnackBarModule, MatProgressSpinnerModule, RouterLink],
   templateUrl: './gestionar-cursos.html',
   styleUrl: './gestionar-cursos.scss',
 })
-export class GestionarCursos {
-  cursos = [
-    { id: 1, titulo: 'Angular desde Cero', categoria: 'Programación', nivel: 'Básico', estudiantes: 42, progreso: 75, rating: 4.9, estado: 'publicado', img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=200&fit=crop' },
-    { id: 2, titulo: 'Power BI para Principiantes', categoria: 'Datos', nivel: 'Básico', estudiantes: 38, progreso: 40, rating: 4.7, estado: 'publicado', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop' },
-    { id: 3, titulo: 'Data Science Básico', categoria: 'Datos', nivel: 'Intermedio', estudiantes: 56, progreso: 90, rating: 4.9, estado: 'publicado', img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=200&fit=crop' },
-    { id: 4, titulo: 'UI/UX Design', categoria: 'Diseño', nivel: 'Básico', estudiantes: 20, progreso: 25, rating: 4.5, estado: 'borrador', img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=200&fit=crop' },
-  ];
+export class GestionarCursos implements OnInit {
+  private cursoService = inject(CursoService);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
+
+  cursos: Curso[] = [];
+  cargando = true;
+  docenteId: number | null = null;
+
+  ngOnInit() {
+    this.docenteId = this.authService.getUserId();
+    if (this.docenteId) this.cargarCursos();
+    else this.cargando = false;
+  }
+
+  cargarCursos() {
+    this.cargando = true;
+    this.cursoService.obtenerPorDocente(this.docenteId!).subscribe({
+      next: (data) => { this.cursos = data; this.cargando = false; },
+      error: () => { this.cargando = false; }
+    });
+  }
+
+  eliminar(id: number) {
+    if (!confirm('¿Eliminar este curso?')) return;
+    this.cursoService.eliminar(id).subscribe({
+      next: () => {
+        this.cursos = this.cursos.filter(c => c.id !== id);
+        this.snackBar.open('Curso eliminado', 'Cerrar', { duration: 3000, horizontalPosition: 'end', verticalPosition: 'top' });
+      },
+      error: () => this.snackBar.open('Error al eliminar', 'Cerrar', { duration: 3000 })
+    });
+  }
 
   getNivelColor(nivel: string): string {
-    const map: Record<string, string> = { 'Básico': '#4CAF50', 'Intermedio': '#F48C06', 'Avanzado': '#9C27B0' };
-    return map[nivel] ?? '#49BBBD';
+    const map: Record<string, string> = { 'basico': '#4CAF50', 'intermedio': '#F48C06', 'avanzado': '#9C27B0' };
+    return map[nivel?.toLowerCase()] ?? '#49BBBD';
   }
 
-  get cursosPublicados(): number {
-    return this.cursos.filter(c => c.estado === 'publicado').length;
-  }
-
+  get cursosPublicados(): number { return this.cursos.length; }
   get totalEstudiantes(): number {
-    return this.cursos.reduce((acc, c) => acc + c.estudiantes, 0);
+    return new Set(this.cursos.flatMap(c => c.inscripciones ?? [])).size;
   }
 }

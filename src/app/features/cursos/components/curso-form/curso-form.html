@@ -79,23 +79,24 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Docente</mat-label>
-          <mat-icon matPrefix>person</mat-icon>
-          <mat-select formControlName="docente">
-            @for (docente of docentes; track docente.id) {
-              <mat-option [value]="docente.id">
-                {{ docente.nombres }} {{ docente.apellidos }}
-              </mat-option>
-            }
-          </mat-select>
-          @if (docente?.hasError('required') && docente?.touched) {
-            <mat-error>Seleccione un docente</mat-error>
+        <div class="section-label">
+          <mat-icon>image</mat-icon>
+          <span>Imagen del Curso</span>
+        </div>
+
+        <div class="imagen-upload">
+          @if (imagenPreview) {
+            <img [src]="imagenPreview" alt="Preview" class="imagen-preview" />
           }
-        </mat-form-field>
+          <label class="file-label">
+            <mat-icon>upload</mat-icon>
+            <span>{{ subiendoImagen ? 'Subiendo...' : 'Seleccionar imagen' }}</span>
+            <input type="file" accept="image/*" (change)="onImagenChange($event)" [disabled]="subiendoImagen" hidden />
+          </label>
+        </div>
 
         <div class="form-actions">
-          <button class="btn-cancelar" type="button">
+          <button class="btn-cancelar" type="button" (click)="cancelar()">
             <mat-icon>close</mat-icon> Cancelar
           </button>
           <button class="btn-guardar" (click)="guardarCurso()">

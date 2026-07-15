@@ -2,11 +2,9 @@
   <div class="form-card">
 
     <div class="card-header">
-      <div class="header-icon">
-        <mat-icon>folder_open</mat-icon>
-      </div>
+      <div class="header-icon"><mat-icon>folder_open</mat-icon></div>
       <div class="header-text">
-        <h2>Crear Contenido</h2>
+        <h2>{{ contenidoId ? 'Editar' : 'Crear' }} Contenido</h2>
         <p>Agrega material de aprendizaje a un curso existente</p>
       </div>
     </div>
@@ -14,10 +12,7 @@
     <div class="card-body">
       <form [formGroup]="contenidoForm">
 
-        <div class="section-label">
-          <mat-icon>info</mat-icon>
-          <span>Información del Material</span>
-        </div>
+        <div class="section-label"><mat-icon>info</mat-icon><span>Información del Material</span></div>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Título del contenido</mat-label>
@@ -31,23 +26,7 @@
           }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>URL del material</mat-label>
-          <mat-icon matPrefix>link</mat-icon>
-          <input matInput formControlName="urlMaterial" placeholder="https://youtube.com/..." />
-          <mat-hint>Enlace al video, PDF o recurso externo</mat-hint>
-          @if (urlMaterial?.hasError('required') && urlMaterial?.touched) {
-            <mat-error>La URL es obligatoria</mat-error>
-          }
-          @if (urlMaterial?.hasError('pattern') && urlMaterial?.touched) {
-            <mat-error>Ingrese una URL válida</mat-error>
-          }
-        </mat-form-field>
-
-        <div class="section-label">
-          <mat-icon>tune</mat-icon>
-          <span>Clasificación</span>
-        </div>
+        <div class="section-label"><mat-icon>tune</mat-icon><span>Clasificación</span></div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-width">
@@ -56,8 +35,8 @@
             <mat-select formControlName="tipo">
               <mat-option value="VIDEO">🎬 Video</mat-option>
               <mat-option value="PDF">📄 PDF</mat-option>
-              <mat-option value="PRESENTACION">📊 Presentación</mat-option>
-              <mat-option value="ENLACE">🔗 Enlace Externo</mat-option>
+              <mat-option value="WORD">📝 Word</mat-option>
+              <mat-option value="LINK">🔗 Enlace</mat-option>
             </mat-select>
             @if (tipo?.hasError('required') && tipo?.touched) {
               <mat-error>Seleccione un tipo</mat-error>
@@ -65,31 +44,70 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Curso asociado</mat-label>
-            <mat-icon matPrefix>menu_book</mat-icon>
-            <mat-select formControlName="cursoId">
-              <mat-option value="14">Spring Boot: De Cero a Experto</mat-option>
-              <mat-option value="16">Cálculo I</mat-option>
-              <mat-option value="17">Función Lineal</mat-option>
-              <mat-option value="18">Química Inorgánica</mat-option>
-            </mat-select>
-            @if (cursoId?.hasError('required') && cursoId?.touched) {
-              <mat-error>Seleccione un curso</mat-error>
-            }
+            <mat-label>Duración</mat-label>
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput formControlName="duracion" placeholder="Ej: 15 min" />
           </mat-form-field>
         </div>
 
+        <!-- URL input para VIDEO y LINK -->
+        @if (esUrl) {
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ tipoActual === 'VIDEO' ? 'URL del video (YouTube)' : 'URL del enlace' }}</mat-label>
+            <mat-icon matPrefix>link</mat-icon>
+            <input matInput formControlName="url_material" placeholder="https://..." />
+            @if (url_material?.hasError('required') && url_material?.touched) {
+              <mat-error>La URL es obligatoria</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        <!-- File input para PDF y WORD -->
+        @if (esArchivo) {
+          <div class="file-upload-area">
+            <label class="file-label">
+              <mat-icon>upload_file</mat-icon>
+              <span>{{ tipoActual === 'PDF' ? 'Seleccionar PDF' : 'Seleccionar documento Word' }}</span>
+              <input type="file"
+                [accept]="tipoActual === 'PDF' ? '.pdf' : '.doc,.docx'"
+                (change)="onArchivoChange($event)"
+                class="file-input" />
+            </label>
+            @if (subiendoArchivo) {
+              <p class="upload-status uploading"><mat-icon>hourglass_top</mat-icon> Subiendo archivo...</p>
+            }
+            @if (urlSubida && !subiendoArchivo) {
+              <p class="upload-status success"><mat-icon>check_circle</mat-icon> Archivo subido correctamente</p>
+            }
+            @if (archivoSeleccionado && !urlSubida && !subiendoArchivo) {
+              <p class="upload-status error"><mat-icon>error</mat-icon> Error al subir. Intenta de nuevo.</p>
+            }
+          </div>
+        }
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Curso asociado</mat-label>
+          <mat-icon matPrefix>menu_book</mat-icon>
+          <mat-select formControlName="curso_id">
+            @for (c of cursos; track c.id) {
+              <mat-option [value]="c.id">{{ c.titulo }}</mat-option>
+            }
+          </mat-select>
+          @if (curso_id?.hasError('required') && curso_id?.touched) {
+            <mat-error>Seleccione un curso</mat-error>
+          }
+        </mat-form-field>
+
         <div class="form-actions">
-          <button class="btn-cancelar" type="button">
+          <button class="btn-cancelar" type="button" (click)="router.navigate(['/dashboard/gestionar-contenidos'])">
             <mat-icon>close</mat-icon> Cancelar
           </button>
-          <button class="btn-guardar" (click)="guardarContenido()">
-            <mat-icon>upload</mat-icon> Subir Contenido
+          <button class="btn-guardar" (click)="guardarContenido()" [disabled]="guardando || subiendoArchivo">
+            <mat-icon>upload</mat-icon> {{ guardando ? 'Guardando...' : 'Subir Contenido' }}
           </button>
         </div>
 
       </form>
     </div>
-
   </div>
 </div>

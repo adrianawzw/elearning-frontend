@@ -187,6 +187,18 @@
   }
 }
 
+.navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  object-fit: cover;
+}
+
+.scrolled .navbar-avatar {
+  border-color: var(--primary);
+}
+
 @media (max-width: 768px) {
   .navbar-toggle {
     display: block;

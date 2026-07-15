@@ -1,0 +1,12 @@
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.header-actions { display: flex; gap: 0.5rem; align-items: center; }
+.btn-volver { display: flex; align-items: center; gap: 0.3rem; padding: 0.5rem 1rem; border: 1px solid #ccc; border-radius: 8px; background: white; cursor: pointer; }
+.btn-nuevo { display: flex; align-items: center; gap: 0.3rem; padding: 0.5rem 1rem; background: #49BBBD; color: white; border-radius: 8px; text-decoration: none; }
+.evaluaciones-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.eval-card { border-radius: 12px; }
+.eval-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.tipo-badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.eval-actions { display: flex; }
+.eval-desc { color: #666; font-size: 0.9rem; margin: 0.3rem 0; }
+.eval-meta { display: flex; gap: 1rem; font-size: 0.85rem; color: #888; margin-top: 0.5rem; }
+.eval-meta mat-icon { font-size: 1rem; vertical-align: middle; }

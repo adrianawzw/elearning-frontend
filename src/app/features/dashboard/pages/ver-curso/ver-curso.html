@@ -1,5 +1,11 @@
 <div class="ver-curso-page">
 
+  @if (!curso) {
+    <div class="loading-state"><mat-icon>hourglass_empty</mat-icon> Cargando curso...</div>
+  }
+
+  @if (curso) {
+
   <!-- Header -->
   <div class="page-header">
     <div class="header-left">
@@ -8,15 +14,15 @@
       </a>
       <div>
         <h2>{{ curso.titulo }}</h2>
-        <p><mat-icon>person</mat-icon> {{ curso.docente }}</p>
+        <p><mat-icon>person</mat-icon> {{ curso?.docente }}</p>
       </div>
     </div>
     <div class="header-progreso">
       <span class="progreso-txt">{{ completadas }}/{{ lecciones.length }} lecciones</span>
       <div class="progress-track">
-        <div class="progress-fill" [style.width.%]="curso.progreso"></div>
+        <div class="progress-fill" [style.width.%]="progreso"></div>
       </div>
-      <span class="progreso-pct">{{ curso.progreso }}%</span>
+      <span class="progreso-pct">{{ progreso }}%</span>
     </div>
   </div>
 
@@ -25,21 +31,45 @@
 
     <!-- Reproductor / Contenido -->
     <div class="contenido-main">
-      <div class="video-wrap">
-        <img [src]="curso.img" [alt]="curso.titulo" class="video-placeholder" />
-        <div class="video-overlay">
-          <button class="btn-play"><mat-icon>play_circle</mat-icon></button>
+      <!-- Reproductor dinámico según tipo -->
+      @if (leccionActual) {
+        <div class="recurso-accion">
+          @if (leccionActual.tipo === 'VIDEO') {
+            <mat-icon>smart_display</mat-icon>
+            <span>{{ leccionActual.titulo }}</span>
+            <button class="btn-recurso" (click)="abrirEnlace(leccionActual.url_material)">
+              <mat-icon>play_arrow</mat-icon> Ver video
+            </button>
+          }
+          @if (leccionActual.tipo === 'PDF' || leccionActual.tipo === 'WORD') {
+            <mat-icon>{{ leccionActual.tipo === 'PDF' ? 'picture_as_pdf' : 'description' }}</mat-icon>
+            <span>{{ leccionActual.titulo }}</span>
+            <button class="btn-recurso" (click)="abrirEnlace(leccionActual.url_material)">
+              <mat-icon>download</mat-icon> Descargar archivo
+            </button>
+          }
+          @if (leccionActual.tipo === 'LINK') {
+            <mat-icon>link</mat-icon>
+            <span>{{ leccionActual.titulo }}</span>
+            <button class="btn-recurso" (click)="abrirEnlace(leccionActual.url_material)">
+              <mat-icon>open_in_new</mat-icon> Ver enlace
+            </button>
+          }
         </div>
-      </div>
+      } @else {
+        <div class="video-wrap">
+          <img [src]="curso?.imagen_url ?? 'https://ui-avatars.com/api/?name=' + (curso?.titulo ?? 'Curso') + '&size=800&background=49BBBD&color=fff'" [alt]="curso?.titulo" class="video-placeholder" />
+        </div>
+      }
 
       <mat-tab-group class="info-tabs" animationDuration="200ms">
         <mat-tab label="Descripción">
           <div class="tab-content">
-            <h3>{{ leccionActual.titulo }}</h3>
-            <p>{{ curso.descripcion }}</p>
+            <h3>{{ leccionActual?.titulo }}</h3>
+            <p>{{ curso?.descripcion }}</p>
             <div class="leccion-meta">
-              <span><mat-icon>schedule</mat-icon> {{ leccionActual.duracion }}</span>
-              <span><mat-icon>{{ getTipoIcon(leccionActual.tipo) }}</mat-icon> {{ leccionActual.tipo }}</span>
+              <span><mat-icon>schedule</mat-icon> {{ leccionActual?.duracion ?? '—' }}</span>
+              <span><mat-icon>{{ getTipoIcon(leccionActual?.tipo ?? '') }}</mat-icon> {{ leccionActual?.tipo }}</span>
             </div>
           </div>
         </mat-tab>
@@ -59,14 +89,19 @@
         </mat-tab>
         <mat-tab label="Evaluación">
           <div class="tab-content">
-            <div class="eval-promo">
-              <mat-icon>quiz</mat-icon>
-              <h4>Evaluación del módulo</h4>
-              <p>Pon a prueba lo que aprendiste en este módulo</p>
-              <a class="btn-eval" routerLink="/dashboard/evaluacion">
-                <mat-icon>play_arrow</mat-icon> Iniciar Evaluación
-              </a>
-            </div>
+            @if (evaluaciones.length === 0) {
+              <p>No hay evaluaciones para este curso.</p>
+            }
+            @for (ev of evaluaciones; track ev.id) {
+              <div class="eval-promo">
+                <mat-icon>quiz</mat-icon>
+                <h4>{{ ev.titulo }}</h4>
+                <p>Puntaje mínimo: {{ ev.puntaje_minimo ?? ev.puntajeMinimo }}</p>
+                <a class="btn-eval" [routerLink]="['/dashboard/evaluacion', ev.id]">
+                  <mat-icon>play_arrow</mat-icon> Iniciar Evaluación
+                </a>
+              </div>
+            }
           </div>
         </mat-tab>
       </mat-tab-group>
@@ -75,9 +110,9 @@
         <button class="btn-nav" [disabled]="leccionActiva === 0" (click)="leccionActiva = leccionActiva - 1">
           <mat-icon>arrow_back</mat-icon> Anterior
         </button>
-        <button class="btn-completar" (click)="marcarCompletada()" [disabled]="leccionActual.completada">
-          <mat-icon>{{ leccionActual.completada ? 'check_circle' : 'check' }}</mat-icon>
-          {{ leccionActual.completada ? 'Completada' : 'Marcar como completada' }}
+        <button class="btn-completar" (click)="marcarCompletada()" [disabled]="!leccionActual || leccionActual.completada">
+          <mat-icon>{{ leccionActual?.completada ? 'check_circle' : 'check' }}</mat-icon>
+          {{ leccionActual?.completada ? 'Completada' : 'Marcar como completada' }}
         </button>
         <button class="btn-nav" [disabled]="leccionActiva === lecciones.length - 1" (click)="leccionActiva = leccionActiva + 1">
           Siguiente <mat-icon>arrow_forward</mat-icon>
@@ -106,7 +141,7 @@
             </div>
             <div class="leccion-info">
               <span class="leccion-titulo">{{ leccion.titulo }}</span>
-              <span class="leccion-dur">{{ leccion.duracion }}</span>
+              <span class="leccion-dur">{{ leccion.duracion ?? '—' }}</span>
             </div>
           </div>
         }
@@ -114,4 +149,6 @@
     </div>
 
   </div>
+
+  } <!-- end @if (curso) -->
 </div>

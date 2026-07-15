@@ -25,27 +25,27 @@
     @for (curso of cursosFiltrados; track curso.id) {
       <mat-card class="curso-card">
         <div class="curso-img-wrap">
-          <img [src]="curso.img" [alt]="curso.titulo" class="curso-img" />
-          <span class="nivel-badge" [style.background]="getNivelColor(curso.nivel)">{{ curso.nivel }}</span>
-          @if (curso.inscrito) {
+          <img [src]="curso.imagen_url ?? 'https://ui-avatars.com/api/?name=' + curso.titulo + '&size=400&background=49BBBD&color=fff'" [alt]="curso.titulo" class="curso-img" />
+          <span class="nivel-badge" [style.background]="getNivelColor(curso.nivel ?? '')">{{ curso.nivel }}</span>
+          @if (estaInscrito(curso.id)) {
             <span class="inscrito-badge"><mat-icon>check_circle</mat-icon> Inscrito</span>
           }
         </div>
         <mat-card-content class="curso-body">
-          <span class="categoria-tag">{{ curso.categoria }}</span>
+          <span class="categoria-tag">{{ curso.categoria ?? 'General' }}</span>
           <h4>{{ curso.titulo }}</h4>
-          <p class="docente"><mat-icon>person</mat-icon> {{ curso.docente }}</p>
+          <p class="docente"><mat-icon>person</mat-icon> {{ curso.docente?.nombres }} {{ curso.docente?.apellidos }}</p>
           <div class="curso-meta">
-            <span><mat-icon>group</mat-icon> {{ curso.estudiantes }}</span>
-            <span><mat-icon>schedule</mat-icon> {{ curso.duracion }}</span>
-            <span><mat-icon>star</mat-icon> {{ curso.rating }}</span>
+            <span><mat-icon>group</mat-icon> {{ curso.estudiantes ?? 0 }}</span>
+            <span><mat-icon>schedule</mat-icon> {{ curso.duracion ?? '—' }}</span>
+            <span><mat-icon>star</mat-icon> {{ curso.rating ?? '—' }}</span>
           </div>
         </mat-card-content>
         <mat-card-actions class="curso-footer">
-          <span class="precio" [class.gratis]="curso.precio === 'Gratis'">{{ curso.precio }}</span>
-          <button mat-flat-button [class]="curso.inscrito ? 'btn-continuar' : 'btn-inscribir'">
-            <mat-icon>{{ curso.inscrito ? 'play_arrow' : 'add' }}</mat-icon>
-            {{ curso.inscrito ? 'Continuar' : 'Inscribirse' }}
+          <span class="precio" [class.gratis]="!curso.precio || curso.precio === 'Gratis'">{{ curso.precio ?? 'Gratis' }}</span>
+          <button mat-flat-button [class]="estaInscrito(curso.id) ? 'btn-continuar' : 'btn-inscribir'" (click)="!estaInscrito(curso.id) && inscribirse(curso.id)">
+            <mat-icon>{{ estaInscrito(curso.id) ? 'play_arrow' : 'add' }}</mat-icon>
+            {{ estaInscrito(curso.id) ? 'Continuar' : 'Inscribirse' }}
           </button>
         </mat-card-actions>
       </mat-card>

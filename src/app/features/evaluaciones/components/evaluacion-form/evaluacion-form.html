@@ -1,0 +1,76 @@
+<div class="form-wrapper">
+  <div class="form-card">
+    <div class="card-header">
+      <div class="header-icon"><mat-icon>quiz</mat-icon></div>
+      <div class="header-text">
+        <h2>{{ evaluacionId ? 'Editar' : 'Crear' }} Evaluación</h2>
+        <p>Configura los detalles de la evaluación</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="evalForm">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Curso</mat-label>
+          <mat-icon matPrefix>menu_book</mat-icon>
+          <mat-select formControlName="curso_id">
+            @for (curso of cursos; track curso.id) {
+              <mat-option [value]="curso.id">{{ curso.titulo }}</mat-option>
+            }
+          </mat-select>
+          @if (evalForm.get('curso_id')?.hasError('required') && evalForm.get('curso_id')?.touched) {
+            <mat-error>Seleccione un curso</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput formControlName="titulo" placeholder="Ej: Evaluación Final Angular" />
+          @if (evalForm.get('titulo')?.hasError('required') && evalForm.get('titulo')?.touched) {
+            <mat-error>El título es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo</mat-label>
+            <mat-icon matPrefix>category</mat-icon>
+            <mat-select formControlName="tipo">
+              <mat-option value="EXAMEN">📝 Examen</mat-option>
+              <mat-option value="TAREA">📋 Tarea</mat-option>
+              <mat-option value="ENTREGABLE">📦 Entregable</mat-option>
+            </mat-select>
+            @if (evalForm.get('tipo')?.hasError('required') && evalForm.get('tipo')?.touched) {
+              <mat-error>Seleccione un tipo</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Puntaje mínimo (%)</mat-label>
+            <mat-icon matPrefix>grade</mat-icon>
+            <input matInput type="number" formControlName="puntaje_minimo" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput rows="3" formControlName="descripcion" placeholder="Describe el objetivo..."></textarea>
+          @if (evalForm.get('descripcion')?.hasError('required') && evalForm.get('descripcion')?.touched) {
+            <mat-error>La descripción es obligatoria</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button class="btn-cancelar" type="button" (click)="router.navigate(['/dashboard/gestionar-evaluaciones'], {queryParams: {cursoId: cursoId}})">
+            <mat-icon>close</mat-icon> Cancelar
+          </button>
+          <button class="btn-guardar" (click)="guardar()" [disabled]="guardando">
+            <mat-icon>save</mat-icon> {{ guardando ? 'Guardando...' : 'Guardar Evaluación' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,30 +1,95 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { CursoService } from '../../../cursos/services/curso.service';
+import { EvaluacionService } from '../../services/evaluacion.service';
+import { ResultadoEvaluacionService } from '../../services/resultado-evaluacion.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-resultados',
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatTabsModule, RouterLink],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatTabsModule,
+    MatProgressSpinnerModule, MatSnackBarModule, MatFormFieldModule, MatInputModule,
+    RouterLink, FormsModule],
   templateUrl: './resultados.html',
   styleUrl: './resultados.scss',
 })
-export class Resultados {
-  evaluaciones = [
-    { id: 1, titulo: 'Evaluación Final Angular', curso: 'Angular desde Cero', fecha: '15 Ene 2025', inscritos: 32, completados: 28, promedio: 78, estado: 'activa' },
-    { id: 2, titulo: 'Quiz Python Básico', curso: 'Python para Datos', fecha: '10 Ene 2025', inscritos: 45, completados: 45, promedio: 85, estado: 'cerrada' },
-    { id: 3, titulo: 'Evaluación UI/UX', curso: 'Diseño UI/UX', fecha: '20 Ene 2025', inscritos: 20, completados: 5, promedio: 72, estado: 'activa' },
-    { id: 4, titulo: 'Examen SQL Avanzado', curso: 'PostgreSQL Avanzado', fecha: '05 Ene 2025', inscritos: 18, completados: 18, promedio: 65, estado: 'cerrada' },
-  ];
+export class Resultados implements OnInit {
+  private cursoService = inject(CursoService);
+  private evaluacionService = inject(EvaluacionService);
+  private resultadoService = inject(ResultadoEvaluacionService);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
-  get activas() { return this.evaluaciones.filter(e => e.estado === 'activa'); }
-  get cerradas() { return this.evaluaciones.filter(e => e.estado === 'cerrada'); }
+  cargando = true;
+  evaluacionesConResultados: any[] = [];
+  calificandoId: number | null = null;
+  notaInput: Record<number, number> = {};
 
-  getPromedioColor(promedio: number): string {
-    if (promedio >= 80) return '#4CAF50';
-    if (promedio >= 60) return '#F48C06';
+  ngOnInit() {
+    const docenteId = this.authService.getUserId();
+    if (!docenteId) { this.cargando = false; return; }
+
+    this.cursoService.obtenerPorDocente(docenteId).subscribe({
+      next: (cursos) => {
+        if (!cursos.length) { this.cargando = false; return; }
+        forkJoin(cursos.map(c =>
+          this.evaluacionService.obtenerPorCurso(c.id).pipe(catchError(() => of([])))
+        )).subscribe(resultados => {
+          const evaluaciones = resultados.flatMap((lista: any[], i) =>
+            (lista ?? []).map(ev => ({ ...ev, cursoTitulo: cursos[i].titulo }))
+          );
+          if (!evaluaciones.length) { this.cargando = false; return; }
+          forkJoin(evaluaciones.map(ev =>
+            this.resultadoService.obtenerPorEstudiante(ev.id).pipe(catchError(() => of([])))
+          )).subscribe(entregas => {
+            this.evaluacionesConResultados = evaluaciones.map((ev, i) => ({
+              ...ev,
+              entregas: entregas[i] ?? []
+            }));
+            this.cargando = false;
+          });
+        });
+      },
+      error: () => { this.cargando = false; }
+    });
+  }
+
+  calificar(resultadoId: number, evaluacionIdx: number) {
+    const nota = this.notaInput[resultadoId];
+    if (nota == null || nota < 0 || nota > 100) {
+      this.snackBar.open('Ingresa una nota entre 0 y 100', 'Cerrar', { duration: 3000 }); return;
+    }
+    this.resultadoService.calificar(resultadoId, nota).subscribe({
+      next: () => {
+        const entrega = this.evaluacionesConResultados[evaluacionIdx]?.entregas.find((e: any) => e.id === resultadoId);
+        if (entrega) entrega.nota = nota;
+        this.calificandoId = null;
+        this.snackBar.open('Calificación guardada', 'Cerrar', { duration: 3000, horizontalPosition: 'end', verticalPosition: 'top' });
+      },
+      error: () => this.snackBar.open('Error al calificar', 'Cerrar', { duration: 3000 })
+    });
+  }
+
+  getTipoColor(tipo: string): string {
+    const map: Record<string, string> = { 'EXAMEN': '#F44336', 'TAREA': '#F48C06', 'ENTREGABLE': '#9C27B0' };
+    return map[tipo] ?? '#49BBBD';
+  }
+
+  getNotaColor(nota: number): string {
+    if (nota >= 80) return '#4CAF50';
+    if (nota >= 60) return '#F48C06';
     return '#F44336';
   }
 }
