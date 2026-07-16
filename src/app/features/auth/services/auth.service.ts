@@ -9,6 +9,7 @@ import {
   RegisterResponse,
   UserSession,
 } from '../interfaces/auth.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,8 @@ import {
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly API_URL = 'http://localhost:8080/api/v1/auth';
-  private readonly BASE_URL = 'http://localhost:8080/api/v1';
+  private readonly API_URL = `${environment.apiUrl}/auth`;
+  private readonly BASE_URL = environment.apiUrl;
   private readonly TOKEN_KEY = 'access_token';
   private readonly USER_KEY = 'user_session';
 

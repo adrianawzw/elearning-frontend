@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Inscripcion } from '../../../shared/interfaces/models.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class InscripcionService {
   private http = inject(HttpClient);
-  private readonly API = 'http://localhost:8080/api/v1';
+  private readonly API = environment.apiUrl;
 
   obtenerPorEstudiante(estudianteId: number): Observable<Inscripcion[]> {
     return this.http.get<Inscripcion[]>(`${this.API}/inscripciones/estudiante/${estudianteId}`);
