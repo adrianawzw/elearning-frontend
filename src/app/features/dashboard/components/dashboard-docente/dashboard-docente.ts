@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,7 +16,7 @@ import { Curso } from '../../../../shared/interfaces/models.interface';
 
 @Component({
   selector: 'app-dashboard-docente',
-  imports: [CommonModule, DatePipe, MatCardModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatChipsModule, RouterLink, MatSnackBarModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatChipsModule, RouterLink, MatSnackBarModule],
   templateUrl: './dashboard-docente.html',
   styleUrl: './dashboard-docente.scss',
 })

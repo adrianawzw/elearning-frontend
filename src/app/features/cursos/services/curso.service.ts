@@ -3,11 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Curso } from '../../../shared/interfaces/models.interface';
 import { Usuario } from '../interfaces/usuario.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CursoService {
   private http = inject(HttpClient);
-  private readonly API = 'http://localhost:8080/api/v1';
+  private readonly API = environment.apiUrl;
 
   private cursosSubject = new BehaviorSubject<Curso[]>([]);
   cursos$ = this.cursosSubject.asObservable();

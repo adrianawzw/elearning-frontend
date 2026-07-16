@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Contenido } from '../../../shared/interfaces/models.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ContenidoService {
   private http = inject(HttpClient);
-  private readonly API = 'http://localhost:8080/api/v1';
+  private readonly API = environment.apiUrl;
 
   obtenerPorCurso(cursoId: number): Observable<Contenido[]> {
     return this.http.get<Contenido[]>(`${this.API}/contenidos/curso/${cursoId}`);
